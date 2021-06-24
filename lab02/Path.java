@@ -17,7 +17,7 @@ public class Path {
         return curr.getY();
     }
     public double getNextX() {
-        return next.getY();
+        return next.getX();
     }
 
     public double getNextY() {
@@ -33,7 +33,9 @@ public class Path {
     }
     public void iterate(double dx, double dy){
         setCurrentPoint(next);
-        next.setX(getCurrX()+dx);
-        next.setY(getCurrY()+dy);
+        double tempX=curr.getX()+dx;
+        double tempY=curr.getY()+dy;
+        next.setX(tempX);
+        next.setY(tempY);
     }
 }

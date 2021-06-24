@@ -50,8 +50,13 @@ public class Account {
             return false;
         } else if (balance < amount) {
             if (parentAccount != null) {
-                parentAccount.merge(this);
-                return parentAccount.withdraw(amount);
+                if (parentAccount.getBalance()>amount-balance){
+                    parentAccount.merge(this);
+                    return parentAccount.withdraw(amount);
+                }else{
+                    System.out.println("Insufficient funds");
+                    return false;
+                }
             } else {
                 System.out.println("Insufficient funds");
                 return false;

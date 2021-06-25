@@ -32,10 +32,6 @@ public class DateConverter {
                 daysInMonth = 31;
             }
             // TODO: Here is another possible place to put assignment statements.
-            if (month==12){
-                month=1;
-                daysInMonth=31;
-            }
         }
         dateInMonth = dayOfYear;
         System.out.println(month + "/" + dateInMonth);

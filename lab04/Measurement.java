@@ -53,6 +53,10 @@ public class Measurement {
     public Measurement plus(Measurement m2) {
         int newfeet = m2.getFeet() + feetnumber;
         int newinches = m2.getInches() + inchesnumber;// provided to allow the file to compile
+        if (newinches > 12) {
+            newinches -= 1;
+            newfeet += 1;
+        }
         return new Measurement(newfeet, newinches);
     }
 
@@ -61,8 +65,9 @@ public class Measurement {
      * that m2 will always be smaller than the current measurement.
      */
     public Measurement minus(Measurement m2) {
-        int newfeet = feetnumber - m2.getFeet();
-        int newinches = inchesnumber - m2.getInches();
+        int temp=feetnumber*12+inchesnumber- m2.getFeet()*12-m2.getInches();
+        int newfeet = temp / 12;
+        int newinches = temp % 12;
         return new Measurement(newfeet, newinches); // provided to allow the file to compile
     }
 
@@ -73,11 +78,11 @@ public class Measurement {
      * (3) should return an object that represents 1 foot, 9 inches.
      */
     public Measurement multiple(int multipleAmount) {
-        int temp = feetnumber*12 + inchesnumber;
-        temp=temp*multipleAmount;
-        int newFeet=temp/12;
-        int newInches=temp%12;
-        return new Measurement(newFeet,newInches); // provided to allow the file to compile
+        int temp = feetnumber * 12 + inchesnumber;
+        temp = temp * multipleAmount;
+        int newFeet = temp / 12;
+        int newInches = temp % 12;
+        return new Measurement(newFeet, newInches); // provided to allow the file to compile
     }
 
     /**
@@ -89,7 +94,7 @@ public class Measurement {
     @Override
     public String toString() {
         String result;
-        result=feetnumber+"'"+inchesnumber+ "\"";
+        result = feetnumber + "'" + inchesnumber + "\"";
         return result; // provided to allow the file to compile
     }
 

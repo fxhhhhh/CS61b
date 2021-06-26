@@ -1,8 +1,10 @@
-public class Counter {
+public class ModNCounter {
 
     private int myCount;
+    private int myn;
 
-    public Counter() {
+    public ModNCounter(int n) {
+        myn=n;
         myCount = 0;
     }
 
@@ -15,7 +17,7 @@ public class Counter {
     }
 
     public int value() {
-        return myCount;
+        return myCount%myn;
     }
 
 }

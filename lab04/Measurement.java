@@ -74,7 +74,7 @@ public class Measurement {
      */
     public Measurement multiple(int multipleAmount) {
         int temp = feetnumber*12 + inchesnumber;
-        temp=temp*3;
+        temp=temp*multipleAmount;
         int newFeet=temp/12;
         int newInches=temp%12;
         return new Measurement(newFeet,newInches); // provided to allow the file to compile

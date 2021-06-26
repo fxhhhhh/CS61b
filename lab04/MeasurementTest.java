@@ -30,9 +30,9 @@ public class MeasurementTest {
         // TODO: stub for first test
         Measurement a =new  Measurement(1,2);
         Measurement b =new  Measurement(3,4);
-        a=a.plus(b);
-        assertEquals(4,a.getFeet());
-        assertEquals(6,a.getInches());
+        Measurement result=a.plus(b);
+        assertEquals(4,result.getFeet());
+        assertEquals(6,result.getInches());
     }
     @Test
     public void test5() {
@@ -47,9 +47,9 @@ public class MeasurementTest {
     public void test6() {
         // TODO: stub for first test
         Measurement a =new  Measurement(1,2);
-        a=a.multiple(3);
-        assertEquals(3,a.getFeet());
-        assertEquals(6,a.getInches());
+        a=a.multiple(0);
+        assertEquals(0,a.getFeet());
+        assertEquals(0,a.getInches());
     }
     @Test
     public void test7() {

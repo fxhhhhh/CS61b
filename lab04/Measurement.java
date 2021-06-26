@@ -51,12 +51,9 @@ public class Measurement {
      * Adds the argument m2 to the current measurement
      */
     public Measurement plus(Measurement m2) {
-        int newfeet = m2.getFeet() + feetnumber;
-        int newinches = m2.getInches() + inchesnumber;// provided to allow the file to compile
-        if (newinches > 12) {
-            newinches -= 1;
-            newfeet += 1;
-        }
+        int temp = (m2.getFeet() + feetnumber)*12+m2.getInches() + inchesnumber;
+        int newfeet = temp / 12;
+        int newinches = temp % 12;
         return new Measurement(newfeet, newinches);
     }
 

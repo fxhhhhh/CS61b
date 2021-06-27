@@ -46,6 +46,7 @@ public class Model extends Observable {
     public Model(int size) {
         // TODO: Fill in this constructor.
         board = new Board(size);
+        score = 0;
     }
 
     /**
@@ -56,6 +57,9 @@ public class Model extends Observable {
     public Model(int[][] rawValues, int score, int maxScore, boolean gameOver) {
         // TODO: Fill in this constructor.
         board = new Board(rawValues, score);
+        this.score = score;
+        this.maxScore = maxScore;
+        this.gameOver = gameOver;
     }
 
     /**
@@ -143,37 +147,43 @@ public class Model extends Observable {
         board.setViewingPerspective(side);
         if (atLeastOneMoveExists(this.board)) {
             int length = this.size();
-            boolean flag;
-            for (int i = length - 1; i > -1; i--) {
-                flag = false;
-                for (int j = length - 1; j > -1; j--) {
-                    Tile now = tile(i, j);
+            int flag;
+            for (int col = length - 1; col > -1; col--) {
+                flag = 0;
+                for (int row = length - 2; row > -1; row--) {
+                    Tile now = tile(col, row);
                     if (now != null) {
                         // tile is not empty
                         int step = 0;
-                        for (int k = j + 1; k <= length - 1; k++) {
-                            Tile temp = tile(i, k);
+                        for (int newRow = row +1; newRow <= length - 1; newRow++) {
+                            Tile temp = tile(col, newRow);
                             if (temp == null) {
                                 step += 1;
                             } else {
                                 if (now.value() == temp.value()) {
-                                    if (!flag) {
-                                        board.move(i, k, now);
+                                    if (flag % 2 == 0) {
+                                        board.move(col, newRow, now);
+                                        score += 2 * temp.value();
                                         changed = true;
-                                        flag = true;
+                                        flag += 1;
                                     } else {
-                                        board.move(i, k - 1, now);
+                                        board.move(col, newRow - 1, now);
+                                        flag+=1;
                                         changed = true;
                                     }
                                 } else {
-                                    board.move(i, k - 1, now);
+                                    if(newRow-1!=row){
+                                    board.move(col, newRow - 1, now);
                                     changed = true;
-                                }
-
+                                    if(flag!=0){
+                                        flag+=1;
+                                    }
+                                }}
+                                break;
                             }
                         }
-                        if (!changed && step != 0) {
-                            board.move(i, length - 1, now);
+                        if (step == length-1-row) {
+                            board.move(col, length - 1, now);
                             changed = true;
                         }
                     }

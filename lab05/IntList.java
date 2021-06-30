@@ -231,14 +231,14 @@ public class IntList {
      */
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
-        if(A==null){
+        if (A == null) {
             return B;
         }
-        IntList result=A;
-        while (A.next!=null){
-            A=A.next;
+        IntList result = A;
+        while (A.next != null) {
+            A = A.next;
         }
-        A.next=B;
+        A.next = B;
         return result;
     }
 
@@ -252,25 +252,27 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
+        IntList result = new IntList(A.item, null);
+        IntList temp = result;
         if (A.next == null) {
-            return B;
-        }
-        IntList result = new IntList(A.item,null);
-        IntList temp=result;
-        A=A.next;
-        while (A.next != null) {
-            temp.next = new IntList(A.item,null);
+            temp.next = B;
+        } else {
             A = A.next;
-            temp=temp.next;
+            while (A.next != null) {
+                temp.next = new IntList(A.item, null);
+                A = A.next;
+                temp = temp.next;
+            }
+
+            temp.next = new IntList(A.item, null);
         }
-        temp.next = new IntList(A.item,null);
-        temp=temp.next;
+        temp = temp.next;
         while (B.next != null) {
-            temp.next = new IntList(B.item,null);
+            temp.next = new IntList(B.item, null);
             B = B.next;
-            temp=temp.next;
+            temp = temp.next;
         }
-        temp.next = new IntList(B.item,null);
+        temp.next = new IntList(B.item, null);
         return result;
 
     }

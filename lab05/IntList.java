@@ -1,4 +1,7 @@
-/** A data structure to represent a Linked List of Integers.
+import java.util.WeakHashMap;
+
+/**
+ * A data structure to represent a Linked List of Integers.
  * Each IntList represents one node in the overall Linked List.
  *
  * @author Maurice Lee and Wan Fung Chui
@@ -6,25 +9,35 @@
 
 public class IntList {
 
-    /** The integer stored by this node. */
+    /**
+     * The integer stored by this node.
+     */
     public int item;
-    /** The next node in this IntList. */
+    /**
+     * The next node in this IntList.
+     */
     public IntList next;
 
-    /** Constructs an IntList storing ITEM and next node NEXT. */
+    /**
+     * Constructs an IntList storing ITEM and next node NEXT.
+     */
     public IntList(int item, IntList next) {
         this.item = item;
         this.next = next;
     }
 
-    /** Constructs an IntList storing ITEM and no next node. */
+    /**
+     * Constructs an IntList storing ITEM and no next node.
+     */
     public IntList(int item) {
         this(item, null);
     }
 
-    /** Returns an IntList consisting of the elements in ITEMS.
+    /**
+     * Returns an IntList consisting of the elements in ITEMS.
      * IntList L = IntList.list(1, 2, 3);
-     * System.out.println(L.toString()) // Prints 1 2 3 */
+     * System.out.println(L.toString()) // Prints 1 2 3
+     */
     public static IntList of(int... items) {
         /** Check for cases when we have no element given. */
         if (items.length == 0) {
@@ -50,8 +63,19 @@ public class IntList {
      */
     public int get(int position) {
         //TODO: YOUR CODE HERE
-        return -1;
+        IntList l = this;
+        if (position < 0) {
+            throw new IllegalArgumentException("YOUR MESSAGE HERE");
+        }
+        for (int index = 0; index < position; index++) {
+            if (l.next == null) {
+                throw new IllegalArgumentException("YOUR MESSAGE HERE");
+            }
+            l = l.next;
+        }
+        return l.item;
     }
+
 
     /**
      * Returns the string representation of the list. For the list (1, 2, 3),
@@ -61,12 +85,19 @@ public class IntList {
      */
     public String toString() {
         //TODO: YOUR CODE HERE
-        return null;
+        IntList ptr = this;
+        String str;
+        str = String.valueOf(ptr.item);
+        while (ptr.next != null) {
+            ptr = ptr.next;
+            str += " " + ptr.item;
+        }
+        return str;
     }
 
     /**
      * Returns whether this and the given list or object are equal.
-     *
+     * <p>
      * NOTE: A full implementation of equals requires checking if the
      * object passed in is of the correct type, as the parameter is of
      * type Object. This also requires we convert the Object to an
@@ -82,10 +113,16 @@ public class IntList {
             return false;
         }
         IntList otherLst = (IntList) obj;
-
         //TODO: YOUR CODE HERE
-
-        return false;
+        boolean flag = true;
+        if (((IntList) obj).next == this.next && this.item == ((IntList) obj).item && this.next == null) {
+            return true;
+        }
+        if (this.item != ((IntList) obj).item) {
+            return false;
+        } else {
+            return this.next.equals(((IntList) obj).next);
+        }
     }
 
     /**
@@ -95,6 +132,11 @@ public class IntList {
      */
     public void add(int value) {
         //TODO: YOUR CODE HERE
+        if (this.next != null) {
+            this.next.add(value);
+        } else {
+            this.next = new IntList(value);
+        }
     }
 
     /**
@@ -104,7 +146,19 @@ public class IntList {
      */
     public int smallest() {
         //TODO: YOUR CODE HERE
-        return -1;
+        int small = this.item;
+        IntList ptr = this;
+        while (ptr.next != null) {
+            if (ptr.item < small) {
+                small = ptr.item;
+            }
+            ptr = ptr.next;
+        }
+        if (ptr.item < small) {
+            small = ptr.item;
+            ptr = ptr.next;
+        }
+        return small;
     }
 
     /**
@@ -114,7 +168,11 @@ public class IntList {
      */
     public int squaredSum() {
         //TODO: YOUR CODE HERE
-        return -1;
+        if (this.next == null) {
+            return this.item * this.item;
+        } else {
+            return this.item * this.item + this.next.squaredSum();
+        }
     }
 
     /**
@@ -150,7 +208,8 @@ public class IntList {
         return res;
     }
 
-    /** Returns a list equal to L with all elements squared. Non-destructive.
+    /**
+     * Returns a list equal to L with all elements squared. Non-destructive.
      *
      * @param L list to non-destructively square.
      * @return the squared list.
@@ -172,7 +231,15 @@ public class IntList {
      */
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
-        return null;
+        if(A==null){
+            return B;
+        }
+        IntList result=A;
+        while (A.next!=null){
+            A=A.next;
+        }
+        A.next=B;
+        return result;
     }
 
     /**
@@ -183,8 +250,30 @@ public class IntList {
      * @param B list to be on the back of the new list.
      * @return new list with A followed by B.
      */
-     public static IntList catenate(IntList A, IntList B) {
+    public static IntList catenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
-        return null;
-     }
+        if (A.next == null) {
+            return B;
+        }
+        IntList result = new IntList(A.item,null);
+        IntList temp=result;
+        A=A.next;
+        while (A.next != null) {
+            temp.next = new IntList(A.item,null);
+            A = A.next;
+            temp=temp.next;
+        }
+        temp.next = new IntList(A.item,null);
+        temp=temp.next;
+        while (B.next != null) {
+            temp.next = new IntList(B.item,null);
+            B = B.next;
+            temp=temp.next;
+        }
+        temp.next = new IntList(B.item,null);
+        return result;
+
+    }
+
+
 }

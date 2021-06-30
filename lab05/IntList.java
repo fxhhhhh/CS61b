@@ -252,6 +252,12 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
+        if(A==null){
+            return B;
+        }
+        if(B==null){
+            return A;
+        }
         IntList result = new IntList(A.item, null);
         IntList temp = result;
         if (A.next == null) {

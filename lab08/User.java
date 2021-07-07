@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Objects;
 
-public class User {
+public class User implements Comparable {
 
     private static int nextId = 1;
 
@@ -22,6 +22,7 @@ public class User {
         this.email = email;
         setAge();
     }
+    public
 
     /** For this assignment, age is just an automatically assigned field. */
     void setAge() {
@@ -87,5 +88,29 @@ public class User {
         for (User user : users) {
             System.out.println(user);
         }
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        User temp =(User) o;
+        if(this.id>temp.id){
+            return this.id-temp.id;
+        }
+        if(this.id<temp.id){
+            return temp.id-this.id;
+        }
+        if(this.id==temp.id){
+            if (this.name.length()>temp.name.length()){
+                return this.name.length()-temp.name.length();
+            }
+            if (this.name.length()<temp.name.length()){
+                return temp.name.length()-this.name.length();
+            }
+            if (this.name.length()==temp.name.length()){
+                return 0;
+            }
+
+        }
+        return 0;
     }
 }

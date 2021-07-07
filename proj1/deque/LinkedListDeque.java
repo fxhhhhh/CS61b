@@ -71,9 +71,9 @@ public class LinkedListDeque<T> implements Deque<T> {
             temp.next = sentinel;
             size += 1;
         } else {
-            sentinel.next.pre = temp;
             temp.next = sentinel.next;
             temp.pre = sentinel;
+            sentinel.next.pre = temp;
             sentinel.next = temp;
             size += 1;
         }
@@ -118,14 +118,14 @@ public class LinkedListDeque<T> implements Deque<T> {
         if (size == 0) {
             return null;
         }
-        size -= 1;
         T a = null;
-        a = (T) sentinel.next.item;
+        a = this.get(0);
         if (isEmpty()) {
             return a;
         } else {
+            sentinel.next.next.pre = sentinel;
             sentinel.next = sentinel.next.next;
-            sentinel.next.pre = sentinel;
+            size -= 1;
             return a;
         }
     }
@@ -135,14 +135,13 @@ public class LinkedListDeque<T> implements Deque<T> {
         if (size == 0) {
             return null;
         }
-        size -= 1;
-        T a = null;
-        a = (T) sentinel.pre.item;
+        T a = this.get(size - 1);
         if (isEmpty()) {
             return a;
         } else {
             sentinel.pre = sentinel.pre.pre;
-            sentinel.pre.pre.next = sentinel;
+            sentinel.pre.next = sentinel;
+            size -= 1;
             return a;
         }
     }
@@ -163,33 +162,27 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        else {
-            if (getClass() == o.getClass()) {
-                LinkedListDeque slList = (LinkedListDeque) o;
-                if (this.size == 0 && slList.size == 0) return true;
-                if (size != slList.size) return false;
-                IntNode l1 = sentinel.next;
-                IntNode l2 = slList.sentinel.next;
-
-                while (l1 != sentinel && l2 != slList.sentinel) {
-                    if (!l1.equals(l2)) return false;
-                    l1 = l1.next;
-                    l2 = l2.next;
-                }
-                return true;
-            } else {
-                ArrayDeque ad = (ArrayDeque) o;
-                for (int i = 0; i < ad.size(); i++) {
-                    T a = (T) this.get(i);
-                    T b = (T) ad.get(i);
-                    if (a != b) {
-                        return false;
-                    }
-                    return true;
-                }
-            }
+        if (this == o) {
             return true;
         }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+
+        Deque<T> other = (Deque<T>) o;
+
+        if (size != other.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (!other.get(i).equals(get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

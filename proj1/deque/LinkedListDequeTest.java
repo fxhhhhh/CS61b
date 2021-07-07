@@ -184,4 +184,15 @@ public class LinkedListDequeTest {
         assertNull(ad.getRecursive(5));
         assertNull(ad.getRecursive(-1));
     }
+    @Test
+    public void agTest() {
+        Deque<Integer> LinkedListDeque = new LinkedListDeque<Integer>();
+        LinkedListDeque.addLast(0);
+        LinkedListDeque.removeFirst()   ;
+        LinkedListDeque.addLast(2);
+        LinkedListDeque.addFirst(3);
+        LinkedListDeque.removeLast()   ;
+        int a =LinkedListDeque.removeFirst();
+        assertEquals(3,a);
+    }
 }

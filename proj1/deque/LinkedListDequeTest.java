@@ -1,4 +1,3 @@
-
 package deque;
 
 import org.junit.Test;
@@ -16,6 +15,30 @@ public class LinkedListDequeTest {
      * you can define a new local variable. However, the autograder will
      * not grade that test. */
 
+    //public static Deque<Integer> lld = new LinkedListDeque<Integer>();
+
+
+//    @Test
+//    /** Adds a few things to the list, checks that isEmpty() is correct.
+//     * This is one simple test to remind you how junit tests work. You
+//     * should write more tests of your own.
+//     *
+//     * && is the "and" operation. */
+//    public void addIsEmptySizeTest() {
+//
+//        System.out.println("Make sure to uncomment the lines below (and delete this print statement)." +
+//                " The code you submit to the AG shouldn't have any print statements!");
+//        /*
+//
+//		assertTrue("A newly initialized LLDeque should be empty", lld.isEmpty());
+//		lld.addFirst(0);
+//
+//        assertFalse("lld should now contain 1 item", lld.isEmpty());
+//
+//        // Reset the linked list deque at the END of the test.
+//        lld = new LinkedListDeque<Integer>();
+//		*/
+//    }
     @Test
     public void testAddFirst() {
         Deque<Integer> lld = new LinkedListDeque<>();
@@ -105,13 +128,13 @@ public class LinkedListDequeTest {
         assertNull(lld.get(0));
         assertNull(lld.get(-1));
         assertNull(lld.get(1));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             lld.addLast(i);
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             assertEquals(i, (int) lld.get(i));
         }
-        assertNull(lld.get(5));
+        assertNull(lld.get(100));
         assertNull(lld.get(-1));
     }
 
@@ -133,22 +156,33 @@ public class LinkedListDequeTest {
         assertNotEquals(lld1, lld2);
         assertNotEquals(1, lld1);
         assertNotEquals("hello", lld1);
+        Deque<Integer> ad1 = new ArrayDeque<>();
+        ad1.addLast(1);
+        ad1.addLast(1);
+        assertEquals(ad1, lld1);
+        lld2 = lld1;
+        assertEquals(lld1, lld2);
+        Deque<Deque> lld3 = new LinkedListDeque<>();
+        Deque<Deque> lld4 = new LinkedListDeque<>();
+        lld3.addLast(lld1);
+        lld4.addFirst(lld2);
+        assertEquals(lld3, lld4);
     }
 
 
     @Test
     public void testGetRecursive() {
-        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
-        assertNull(lld.getRecursive(0));
-        assertNull(lld.getRecursive(-1));
-        assertNull(lld.getRecursive(1));
+        LinkedListDeque<Integer> ad = new LinkedListDeque<>();
+        assertNull(ad.getRecursive(0));
+        assertNull(ad.getRecursive(-1));
+        assertNull(ad.getRecursive(1));
         for (int i = 0; i < 5; i++) {
-            lld.addLast(i);
+            ad.addLast(i);
         }
         for (int i = 0; i < 5; i++) {
-            assertEquals(i, (int) lld.getRecursive(i));
+            assertEquals(i, (int) ad.getRecursive(i));
         }
-        assertNull(lld.getRecursive(5));
-        assertNull(lld.getRecursive(-1));
+        assertNull(ad.getRecursive(5));
+        assertNull(ad.getRecursive(-1));
     }
 }

@@ -1,6 +1,6 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque {
+public class ArrayDeque<T> implements Deque <T>{
     int nowSize = 8;
     T[] a = (T[]) new Object[nowSize];
     int size = 0;
@@ -16,7 +16,7 @@ public class ArrayDeque<T> implements Deque {
     }
 
     @Override
-    public void addFirst(Object item) {
+    public void addFirst(T item) {
         if (size < nowSize) {
             if (nextfirst != 0) {
                 a[nextfirst] = (T) item;
@@ -48,7 +48,7 @@ public class ArrayDeque<T> implements Deque {
     }
 
     @Override
-    public void addLast(Object item) {
+    public void addLast(T item) {
         if (size < nowSize) {
             if (nextlast != nowSize - 1) {
                 a[nextlast] = (T) item;
@@ -100,7 +100,7 @@ public class ArrayDeque<T> implements Deque {
     }
 
     @Override
-    public Object removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
@@ -127,7 +127,7 @@ public class ArrayDeque<T> implements Deque {
     }
 
     @Override
-    public Object removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         }
@@ -155,7 +155,7 @@ public class ArrayDeque<T> implements Deque {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         if (index < 0 || index > size - 1 || size == 0) {
             return null;
         }

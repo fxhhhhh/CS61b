@@ -1,123 +1,6 @@
-//package deque;
-//
-//import org.junit.Test;
-//
-//import static org.junit.Assert.*;
-//
-///* Performs some basic array deque tests. */
-//public class ArrayDequeTest {
-//
-//    /**
-//     * You MUST use the variable below for all of your tests. If you test
-//     * using a local variable, and not this static variable below, the
-//     * autograder will not grade that test. If you would like to test
-//     * ArrayDeques with types other than Integer (and you should),
-//     * you can define a new local variable. However, the autograder will
-//     * not grade that test.
-//     */
-//
-//    //public static Deque<Integer> ad = new ArrayDequeTest<Integer>();
-////    public static Deque<Integer> ad = new ArrayDeque<>();
-//    @Test
-//    public void testAddFirst() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertTrue(ad.isEmpty());
-//        ad.addFirst(1);
-//        assertEquals(1, ad.size());
-//    }
-//
-//    @Test
-//    public void testAddLast() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertTrue(ad.isEmpty());
-//        for (int i = 0; i < 10; i++) {
-//            ad.addLast(i);
-//        }
-//        for (int i =0;i<10;i++){
-//            int b =ad.get(i);
-//            assertEquals(i,b);
-//        }
-//        assertEquals(10, ad.size());
-//
-//    }
-//
-//    @Test
-//    public void testIsEmpty() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertTrue(ad.isEmpty());
-//        ad.addFirst(1);
-//        int a = ad.removeFirst();
-//        assertTrue(ad.isEmpty());
-//
-//
-//    }
-//
-//    @Test
-//    public void testSize() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertEquals(0, ad.size());
-//        for (int i = 0; i < 5; i++) {
-//            ad.addFirst(i);
-//            assertEquals(i + 1, ad.size());
-//        }
-//    }
-//
-//    @Test
-//    public void testRemoveFirst() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertNull(ad.removeFirst());
-//        for (int i = 0; i < 5; i++) {
-//            ad.addFirst(i);
-//        }
-//        for (int i = 0; i < 5; i++) {
-//            int a = ad.removeFirst();
-//            assertEquals(4 - i, a);
-//        }
-//    }
-//
-//    @Test
-//    public void testRemoveLast() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertNull(ad.removeLast());
-//        for (int i = 0; i < 5; i++) {
-//            ad.addFirst(i);
-//        }
-//        for (int i = 0; i < 5; i++) {
-//            assertEquals(i, (int) ad.removeLast());
-//        }
-//        assertNull(ad.removeLast());
-//    }
-//
-//    @Test
-//    public void testGet() {
-//        Deque<Integer> ad = new ArrayDeque<>();
-//        assertNull(ad.get(0));
-//        assertNull(ad.get(-1));
-//        assertNull(ad.get(1));
-//        for (int i = 0; i < 10; i++) {
-//            ad.addFirst(i);
-//        }
-//        for (int i = 0; i < 10; i++) {
-//            int b =ad.get(i);
-//            assertEquals(9-i,b);
-//        }
-//    }
-//
-//    @Test
-//    public void testEquals() {
-//        Deque<Integer> ad1 = new ArrayDeque<>();
-//        Deque<Integer> ad2 = new ArrayDeque<>();
-//        assertTrue(ad1.equals(ad2));
-//        ad1.addFirst(1);
-//        ad2.addFirst(2);
-//        assertFalse(ad1.equals(ad2));
-//        ad1.addLast(2);
-//        ad2.addFirst(1);
-//        assertTrue(ad1.equals(ad2));
-//    }
-//}
 package deque;
 
+import edu.princeton.cs.algs4.In;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -125,14 +8,12 @@ import static org.junit.Assert.*;
 /* Performs some basic array deque tests. */
 public class ArrayDequeTest {
 
-    /**
-     * You MUST use the variable below for all of your tests. If you test
+    /** You MUST use the variable below for all of your tests. If you test
      * using a local variable, and not this static variable below, the
      * autograder will not grade that test. If you would like to test
      * ArrayDeques with types other than Integer (and you should),
      * you can define a new local variable. However, the autograder will
-     * not grade that test.
-     */
+     * not grade that test. */
 
     //public static Deque<Integer> ad = new ArrayDequeTest<Integer>();
 //    public static Deque<Integer> ad = new ArrayDeque<>();
@@ -197,10 +78,10 @@ public class ArrayDequeTest {
     public void testRemoveFirst() {
         Deque<Integer> ad = new ArrayDeque<>();
         assertNull(ad.removeFirst());
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             ad.addLast(i);
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             assertEquals(i, (int) ad.removeFirst());
         }
         assertNull(ad.removeFirst());
@@ -210,10 +91,10 @@ public class ArrayDequeTest {
     public void testRemoveLast() {
         Deque<Integer> ad = new ArrayDeque<>();
         assertNull(ad.removeLast());
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             ad.addFirst(i);
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             assertEquals(i, (int) ad.removeLast());
         }
         assertNull(ad.removeLast());

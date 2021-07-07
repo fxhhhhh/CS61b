@@ -1,5 +1,3 @@
-import java.util.WeakHashMap;
-
 /**
  * A data structure to represent a Linked List of Integers.
  * Each IntList represents one node in the overall Linked List.
@@ -25,6 +23,7 @@ public class IntList {
         this.item = item;
         this.next = next;
     }
+
 
     /**
      * Constructs an IntList storing ITEM and no next node.
@@ -252,10 +251,10 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO: YOUR CODE HERE
-        if(A==null){
+        if (A == null) {
             return B;
         }
-        if(B==null){
+        if (B == null) {
             return A;
         }
         IntList result = new IntList(A.item, null);

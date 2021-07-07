@@ -28,11 +28,11 @@ public class MeasurementTest {
     @Test
     public void test4() {
         // TODO: stub for first test
-        Measurement a =new  Measurement(1,2);
-        Measurement b =new  Measurement(3,4);
+        Measurement a =new  Measurement(1,12);
+        Measurement b =new  Measurement(3,12);
         Measurement result=a.plus(b);
-        assertEquals(4,result.getFeet());
-        assertEquals(6,result.getInches());
+        assertEquals(6,result.getFeet());
+        assertEquals(0,result.getInches());
     }
     @Test
     public void test5() {

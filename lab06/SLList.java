@@ -2,6 +2,7 @@
  * An SLList is a list of integers, which encapsulates the
  * naked linked list structure.
  */
+
 public class SLList {
 
     /**

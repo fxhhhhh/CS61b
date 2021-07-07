@@ -2,7 +2,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class GregorianDateTest {
-
     @Test
     public void testGregorianDate() {
         Date d1 = new GregorianDate(2018, 1, 30);

@@ -23,5 +23,7 @@ public interface Deque<T> {
 
     T get(int index);
 
+    @Override
+    boolean equals(Object o);
 
 }

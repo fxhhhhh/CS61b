@@ -1,6 +1,6 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque <T>{
+public class ArrayDeque<T> implements Deque<T> {
     private int nowSize = 8;
     private T[] a = (T[]) new Object[nowSize];
     private int size = 0;
@@ -161,33 +161,31 @@ public class ArrayDeque<T> implements Deque <T>{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (getClass() == o.getClass()) {
-            ArrayDeque ad = (ArrayDeque) o;
-            if (ad.size != this.size) {
-                return false;
-            }
-            for (int i = 0; i < ad.size; i++) {
-                T a = (T) this.get(i);
-                T b = (T) ad.get(i);
-                if (!a.equals(b)) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            LinkedListDeque<Integer> lld = (LinkedListDeque) o;
-            for (int i = 0; i < lld.size(); i++) {
-                T a = (T) this.get(i);
-                T b = (T) lld.get(i);
-                if (!a.equals(b)) {
-                    return false;
-                }
-            }
+        if (this == o) {
             return true;
         }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
 
+        Deque<T> other = (Deque<T>) o;
+
+        if (size != other.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (!other.get(i).equals(get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
+
+
 }
 
 

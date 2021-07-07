@@ -36,14 +36,14 @@ public class LinkedListDeque<T> implements Deque<T> {
         sentinel.pre = null;
     }
 
-    public LinkedListDeque(T a) {
+    private LinkedListDeque(T a) {
         size = 1;
         sentinel = new IntNode();
         sentinel.next = new IntNode(a);
         sentinel.next.next = sentinel;
     }
 
-    public LinkedListDeque(IntNode a) {
+    private LinkedListDeque(IntNode a) {
         size = 1;
         sentinel = new IntNode();
         sentinel.next = a;
@@ -98,13 +98,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    @Override
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public int size() {

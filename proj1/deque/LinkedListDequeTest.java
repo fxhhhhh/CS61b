@@ -42,15 +42,14 @@ public class LinkedListDequeTest {
     @Test
     public void testAddFirst() {
         Deque<Integer> lld = new LinkedListDeque<>();
-        lld.addFirst(1);
-        assertFalse(lld.isEmpty());
-        assertEquals(1, lld.size());
-        assertEquals(1, (int) lld.get(0));
-        lld.addFirst(2);
-        assertEquals(2, lld.size());
-        assertEquals(2, (int) lld.get(0));
-        lld.addFirst(3);
-        assertEquals(3, (int) lld.get(0));
+        for ( int i=0;i<500;i++){
+            lld.addFirst(i);
+        }
+        for ( int i=0;i<500;i++){
+            int temp=lld.removeFirst();
+            assertEquals(499-i,temp);
+        }
+        assertTrue(lld.isEmpty());
     }
 
     @Test

@@ -1,11 +1,11 @@
 package deque;
 
 public class ArrayDeque<T> implements Deque <T>{
-    int nowSize = 8;
-    T[] a = (T[]) new Object[nowSize];
-    int size = 0;
-    int nextfirst = 4;
-    int nextlast = 5;
+    private int nowSize = 8;
+    private T[] a = (T[]) new Object[nowSize];
+    private int size = 0;
+    private int nextfirst = 4;
+    private int nextlast = 5;
     private T[] array;
 
     public ArrayDeque() {
@@ -78,13 +78,6 @@ public class ArrayDeque<T> implements Deque <T>{
 
     }
 
-    @Override
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public int size() {

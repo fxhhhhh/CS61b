@@ -9,7 +9,9 @@ public interface Deque<T> {
 
     void addLast(T item);
 
-    boolean isEmpty();
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 
     int size();
 
@@ -21,6 +23,5 @@ public interface Deque<T> {
 
     T get(int index);
 
-    boolean equals(Object o);
 
 }

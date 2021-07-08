@@ -89,7 +89,6 @@ public class User implements Comparable {
             System.out.println(user);
         }
     }
-
     @Override
     public int compareTo(Object o) {
         User temp =(User) o;
@@ -97,14 +96,14 @@ public class User implements Comparable {
             return this.id-temp.id;
         }
         if(this.id<temp.id){
-            return temp.id-this.id;
+            return this.id-temp.id;
         }
         if(this.id==temp.id){
             if (this.name.length()>temp.name.length()){
                 return this.name.length()-temp.name.length();
             }
             if (this.name.length()<temp.name.length()){
-                return temp.name.length()-this.name.length();
+                return this.name.length()-temp.name.length();
             }
             if (this.name.length()==temp.name.length()){
                 return 0;

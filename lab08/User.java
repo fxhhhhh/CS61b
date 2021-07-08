@@ -15,13 +15,16 @@ public class User implements Comparable {
         nextId += 1;
     }
 
-    /** Force assign an id to a created user **/
+    /**
+     * Force assign an id to a created user
+     **/
     public User(int id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
         setAge();
     }
+
     public
 
     /** For this assignment, age is just an automatically assigned field. */
@@ -78,38 +81,25 @@ public class User implements Comparable {
 
     public static void main(String[] args) {
         User[] users = {
-            new User(2, "Matt", ""),
-            new User(4, "Zoe", ""),
-            new User(5, "Alex", ""),
-            new User(1, "Shreya", ""),
-            new User(1, "Connor", "")
+                new User(2, "Matt", ""),
+                new User(4, "Zoe", ""),
+                new User(5, "Alex", ""),
+                new User(1, "Shreya", ""),
+                new User(1, "Connor", "")
         };
         Arrays.sort(users);
         for (User user : users) {
             System.out.println(user);
         }
     }
+
     @Override
     public int compareTo(Object o) {
-        User temp =(User) o;
-        if(this.id>temp.id){
-            return this.id-temp.id;
-        }
-        if(this.id<temp.id){
-            return this.id-temp.id;
-        }
-        if(this.id==temp.id){
-            if (this.name.length()>temp.name.length()){
-                return this.name.length()-temp.name.length();
+        User temp = (User) o;
+        if (this.id != temp.id) {
+            return this.id - temp.id;
+        }else{
+            return this.name.length() - temp.name.length();
             }
-            if (this.name.length()<temp.name.length()){
-                return this.name.length()-temp.name.length();
-            }
-            if (this.name.length()==temp.name.length()){
-                return 0;
-            }
-
         }
-        return 0;
     }
-}

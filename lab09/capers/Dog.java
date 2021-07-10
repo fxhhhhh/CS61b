@@ -1,30 +1,42 @@
 package capers;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 import static capers.Main.CAPERS_FOLDER;
 
-/** Represents a dog that can be serialized.
+/**
+ * Represents a dog that can be serialized.
+ *
  * @author Sean Dooher
-*/
-public class Dog implements Serializable{ // FIXME
+ */
+public class Dog implements Serializable { // FIXME
 
-    /** Folder that dogs live in. */
-    static final File DOG_FOLDER =Utils.join(CAPERS_FOLDER,"dogs"); // FIXME
+    /**
+     * Folder that dogs live in.
+     */
+    static final File DOG_FOLDER = Utils.join(CAPERS_FOLDER, "dogs"); // FIXME
 
-    /** Age of dog. */
+    /**
+     * Age of dog.
+     */
     private int age;
-    /** Breed of dog. */
+    /**
+     * Breed of dog.
+     */
     private String breed;
-    /** Name of dog. */
+    /**
+     * Name of dog.
+     */
     private String name;
 
     /**
      * Creates a dog object with the specified parameters.
-     * @param name Name of dog
+     *
+     * @param name  Name of dog
      * @param breed Breed of dog
-     * @param age Age of dog
+     * @param age   Age of dog
      */
     public Dog(String name, String breed, int age) {
         this.age = age;
@@ -40,9 +52,9 @@ public class Dog implements Serializable{ // FIXME
      */
     public static Dog fromFile(String name) {
         // FIXME
-        File a = new File(DOG_FOLDER+name);
-        Dog dog=null;
-        dog= (Dog) Utils.readObject(a,Dog.class);
+        File a = Utils.join(DOG_FOLDER, name);
+        Dog dog = null;
+        dog = (Dog) Utils.readObject(a, Dog.class);
         return dog;
     }
 
@@ -60,14 +72,21 @@ public class Dog implements Serializable{ // FIXME
      */
     public void saveDog() {
         // FIXME
-        File name=new File(String.valueOf("dog"));
-        Utils.writeObject(name,toString());
+        File nameq = Utils.join(DOG_FOLDER, name);
+        if (!nameq.exists()) {
+            try {
+                nameq.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.writeObject(nameq, this);
     }
 
     @Override
     public String toString() {
         return String.format(
-            "Woof! My name is %s and I am a %s! I am %d years old! Woof!",
-            name, breed, age);
+                "Woof! My name is %s and I am a %s! I am %d years old! Woof!",
+                name, breed, age);
     }
 }

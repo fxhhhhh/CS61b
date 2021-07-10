@@ -3,13 +3,15 @@ package capers;
 import java.io.File;
 import java.io.Serializable;
 
+import static capers.Main.CAPERS_FOLDER;
+
 /** Represents a dog that can be serialized.
  * @author Sean Dooher
 */
-public class Dog { // FIXME
+public class Dog implements Serializable{ // FIXME
 
     /** Folder that dogs live in. */
-    static final File DOG_FOLDER = null; // FIXME
+    static final File DOG_FOLDER =Utils.join(CAPERS_FOLDER,"dogs"); // FIXME
 
     /** Age of dog. */
     private int age;
@@ -38,7 +40,10 @@ public class Dog { // FIXME
      */
     public static Dog fromFile(String name) {
         // FIXME
-        return null;
+        File a = new File(DOG_FOLDER+name);
+        Dog dog=null;
+        dog= (Dog) Utils.readObject(a,Dog.class);
+        return dog;
     }
 
     /**
@@ -55,6 +60,8 @@ public class Dog { // FIXME
      */
     public void saveDog() {
         // FIXME
+        File name=new File(String.valueOf("dog"));
+        Utils.writeObject(name,toString());
     }
 
     @Override

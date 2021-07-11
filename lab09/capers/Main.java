@@ -103,7 +103,7 @@ public class Main {
         // FIXME
         File story=Utils.join(CAPERS_FOLDER, "story");
         String content = Utils.readContentsAsString(story);
-        content+=args[1];
+        content+=args[1]+"\n";
         File newStory=Utils.join(CAPERS_FOLDER, "story");
         Utils.writeContents(newStory,content);
         System.out.println(content);
@@ -137,7 +137,7 @@ public class Main {
     public static void celebrateBirthday(String[] args) {
         validateNumArgs("birthday", args, 2);
         // FIXME
-        Dog dog= Dog.fromFile(args[1]+"\n");
+        Dog dog= Dog.fromFile(args[1]);
         dog.haveBirthday();
         dog.saveDog();
     }

@@ -82,13 +82,5 @@ public class UnionFind {
             unionArray[root1]=root2;
         }
     }
-
-    public static void main(String[] args) {
-        UnionFind d=new UnionFind(5);
-        d.union(1,0);
-        d.union(3,2);
-        d.union(2,0);//大小
-        System.out.println(d.sizeOf(3));
-        System.out.println(d.find(1));
-    }
+    
 }

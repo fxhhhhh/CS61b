@@ -52,7 +52,7 @@ public class UnionFind {
     public int find(int v) {
         // TODO: YOUR CODE HERE
         if (v > unionArray.length) {
-            throw new IllegalArgumentException;
+            throw new IllegalArgumentException();
         } else {
             Set<Integer> a = new HashSet<>();
             while (unionArray[v] >= 0) {

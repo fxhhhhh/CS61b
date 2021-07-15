@@ -20,7 +20,7 @@ public class UnionFind {
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        if (unionArray[v] >=0) {
+        if (unionArray[v] >= 0) {
             return sizeOf(unionArray[v]);
         } else {
             return -unionArray[v];
@@ -51,15 +51,19 @@ public class UnionFind {
        function, throw an IllegalArgumentException. */
     public int find(int v) {
         // TODO: YOUR CODE HERE
-        Set<Integer> a = new HashSet<>();
-        while (unionArray[v] >= 0) {
-            a.add(unionArray[v]);
-            v = unionArray[v];
+        if (v > unionArray.length) {
+            throw new IllegalArgumentException;
+        } else {
+            Set<Integer> a = new HashSet<>();
+            while (unionArray[v] >= 0) {
+                a.add(unionArray[v]);
+                v = unionArray[v];
+            }
+            for (Integer i : a) {
+                unionArray[i] = v;
+            }
+            return v;
         }
-        for (Integer i : a) {
-            unionArray[i] = v;
-        }
-        return v;
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
@@ -76,11 +80,10 @@ public class UnionFind {
         }
         if (unionArray[root1] < unionArray[root2]) {
             unionArray[root1] = unionArray[root1] + unionArray[root2];
-            unionArray[root2]=root1;
-        }else {
+            unionArray[root2] = root1;
+        } else {
             unionArray[root2] = unionArray[root1] + unionArray[root2];
-            unionArray[root1]=root2;
+            unionArray[root1] = root2;
         }
     }
-    
 }

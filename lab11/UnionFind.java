@@ -73,10 +73,9 @@ public class UnionFind {
         int root1 = find(v1);
         int root2 = find(v2);
         if (root1 == root2) {
-            System.out.println(111);
             return;
         }
-        if (sizeOf(v1) <= sizeOf(v2)) {
+        if (sizeOf(v1) < sizeOf(v2)) {
             unionArray[root1] = unionArray[root1] + unionArray[root2];
             unionArray[root2] = root1;
         } else {

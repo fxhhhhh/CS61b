@@ -75,7 +75,7 @@ public class UnionFind {
         if (root1 == root2) {
             return;
         }
-        if (sizeOf(v1) > sizeOf(v2)) {
+        if (sizeOf(v1) <= sizeOf(v2)) {
             unionArray[root1] = unionArray[root1] + unionArray[root2];
             unionArray[root2] = root1;
         } else {
@@ -84,5 +84,14 @@ public class UnionFind {
 
         }
     }
-    
+
+    public static void main(String[] args) {
+        UnionFind a = new UnionFind(5);
+        a.union(0,1);
+        a.union(2, 3);
+        a.union(0,2);
+        for (int i = 0; i < 5; i++) {
+            System.out.println(a.unionArray[i]);
+        }
+    }
 }

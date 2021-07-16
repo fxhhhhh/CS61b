@@ -218,8 +218,8 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
                 return null;
             }
             Amoeba node = fringe.remove();
-            for (int i=0; i< node.children.size();i++) {
-                fringe.add(node.children.get(i));
+            for (Amoeba i : node.children) {
+                fringe.add(i);
             }
             return node;
         }

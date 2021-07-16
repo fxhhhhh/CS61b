@@ -1,3 +1,5 @@
+import static java.lang.Math.max;
+
 public class BinaryTree<T> {
 
     TreeNode<T> root;
@@ -17,20 +19,47 @@ public class BinaryTree<T> {
     /* Returns the height of the tree. */
     public int height() {
         // TODO: YOUR CODE HERE
-        return 0;
+        if(root==null){
+            return 0;
+        }
+        if(root.left==null&& root.right==null){
+            return 1;
+        }
+        BinaryTree left=new BinaryTree(root.left);
+        BinaryTree right=new BinaryTree(root.right);
+        return 1+max(left.height(),right.height());
     }
 
     /* Returns true if the tree's left and right children are the same height
        and are themselves completely balanced. */
     public boolean isCompletelyBalanced() {
         // TODO: YOUR CODE HERE
+        if(root==null){
+            return true;
+        }
+        if(root.left==null&& root.right==null){
+            return true;
+        }
+        BinaryTree left=new BinaryTree(root.left);
+        BinaryTree right=new BinaryTree(root.right);
+        if(left.height()==right.height()&&left.isCompletelyBalanced()&&right.isCompletelyBalanced()){
+            return true;
+        }
         return false;
     }
 
     /* Returns a BinaryTree representing the Fibonacci calculation for N. */
     public static BinaryTree<Integer> fibTree(int N) {
         BinaryTree<Integer> result = new BinaryTree<Integer>();
-        return null;
+        if(N==0){
+            return new BinaryTree<Integer>(new TreeNode<Integer>(0));
+        }
+        if(N==1){
+            return new BinaryTree<Integer>(new TreeNode<Integer>(1));
+        }
+        TreeNode<Integer> left = fibTree(N-1).getRoot();
+        TreeNode<Integer> right = fibTree(N-2).getRoot();
+        return new BinaryTree<Integer>(new TreeNode<Integer>(1,left,right));
     }
 
     /* Print the values in the tree in preorder: root value first, then values

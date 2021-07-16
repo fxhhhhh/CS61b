@@ -61,21 +61,18 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
     public static void main(String[] args) {
         AmoebaFamily family = new AmoebaFamily("Amos McCoy");
         family.addChild("Amos McCoy", "mom/dad");
-        family.addChild("Amos McCoy", "auntie");
         family.addChild("mom/dad", "me");
-        family.addChild("mom/dad", "Fred");
-        family.addChild("mom/dad", "Wilma");
         family.addChild("me", "Mike");
-        family.addChild("me", "Homer");
-        family.addChild("me", "Marge");
         family.addChild("Mike", "Bart");
-        family.addChild("Mike", "Lisa");
-        family.addChild("Marge", "Bill");
-        family.addChild("Marge", "Hilary");
+        family.addChild("Bart", "Bill");
         System.out.println("Here's the family:");
         family.print();
         System.out.println(family.longestName());
-
+        Iterator<Amoeba> seer = family.iterator();
+        while (seer.hasNext()) {
+            String x = seer.next().name;
+            System.out.println(x);
+        }
     }
 
     /* An Amoeba is a node of an AmoebaFamily. */
@@ -183,8 +180,8 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
                 return null;
             }
             Amoeba node = fringe.pop();
-            for (Amoeba i : node.children) {
-                fringe.push(i);
+            for (int i=0; i< node.children.size();i++) {
+                fringe.push(node.children.get(node.children.size()-1-i));
             }
             return node;
         }

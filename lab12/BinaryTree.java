@@ -59,7 +59,7 @@ public class BinaryTree<T> {
         }
         TreeNode<Integer> left = fibTree(N-1).getRoot();
         TreeNode<Integer> right = fibTree(N-2).getRoot();
-        return new BinaryTree<Integer>(new TreeNode<Integer>(1,left,right));
+        return new BinaryTree<Integer>(new TreeNode<Integer>(left.item+right.item,left,right));
     }
 
     /* Print the values in the tree in preorder: root value first, then values
@@ -123,13 +123,8 @@ public class BinaryTree<T> {
 
     /* Creates two BinaryTrees and prints them out in inorder. */
     public static void main(String[] args) {
-        BinaryTree t;
-        t = new BinaryTree();
-        print(t, "the empty tree");
-        t.sampleTree1();
-        print(t, "sample tree 1");
-        t.sampleTree2();
-        print(t, "sample tree 2");
+        BinaryTree<Integer> a =new BinaryTree<Integer>();
+        a.fibTree(10).printPreorder();
     }
 
     /* Note: this class is public in this lab for testing purposes. However,

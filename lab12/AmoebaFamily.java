@@ -54,20 +54,17 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
 
     /* Returns an Iterator for this AmoebaFamily. */
     public Iterator<Amoeba> iterator() {
-        return new AmoebaDFSIterator();
+        return new AmoebaBFSIterator();
     }
 
     /* Creates a new AmoebaFamily and prints it out. */
     public static void main(String[] args) {
-        AmoebaFamily family = new AmoebaFamily("Amos McCoy");
-        family.addChild("Amos McCoy", "mom/dad");
-        family.addChild("mom/dad", "me");
-        family.addChild("me", "Mike");
-        family.addChild("Mike", "Bart");
-        family.addChild("Bart", "Bill");
-        System.out.println("Here's the family:");
+        AmoebaFamily family = new AmoebaFamily("[");
+        family.addChild("[", "(");
+        family.addChild("[", ".");
+        family.addChild("[", "_");
+        family.addChild("(", ".");
         family.print();
-        System.out.println(family.longestName());
         Iterator<Amoeba> seer = family.iterator();
         while (seer.hasNext()) {
             String x = seer.next().name;
@@ -221,12 +218,11 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
                 return null;
             }
             Amoeba node = fringe.remove();
-            for (Amoeba i : node.children) {
-                fringe.add(i);
+            for (int i=0; i< node.children.size();i++) {
+                fringe.add(node.children.get(i));
             }
             return node;
         }
-
         public void remove() {
             if (!hasNext()) {
                 throw new UnsupportedOperationException();

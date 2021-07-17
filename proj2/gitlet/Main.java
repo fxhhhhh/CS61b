@@ -1,5 +1,7 @@
 package gitlet;
 
+import java.io.File;
+
 /**
  * Driver class for Gitlet, a subset of the Git version-control system.
  *
@@ -21,37 +23,33 @@ public class Main {
         if (args.length == 0) {
             Utils.exitWithMsg("Please enter a command.");
         }
-        if (args[0] == "init") {
-            if (args.length != 1) {
+        if (args[0].equals("init")) {
+            if (args.length > 1) {
                 Utils.exitWithMsg("Incorrect operands.");
             } else {
                 init();
             }
         } else {
-            if (!Repository.GITLET_DIR.exists() || !Repository.GITLET.exists()) {
-                Utils.exitWithMsg("Not in an initialized Gitlet directory.");
-            }else {
             gitlet = Utils.readObject(Repository.GITLET, Gitlet.class);
-            switch (args[0]) {
-                case "add":
-                    // TODO: handle the `add [filename]` command
-                    add(args);
-                    break;
-                // TODO: FILL THE REST IN
-                case "checkout":
-                    checkout(args);
-                    break;
-                case "commit":
-                    commit(args);
-                    break;
-                case "log":
-                    log(args);
-                    break;
-                default:
-                    Utils.exitWithMsg("No command with that name exists.");
-            }
-        }}
-    }
+        switch (args[0]) {
+            case "add":
+                // TODO: handle the `add [filename]` command
+                add(args);
+                break;
+            // TODO: FILL THE REST IN
+            case "checkout":
+                checkout(args);
+                break;
+            case "commit":
+                commit(args);
+                break;
+            case "log":
+                log(args);
+                break;
+            default:
+                Utils.exitWithMsg("No command with that name exists.");
+        }
+    }}
 
     private static void init() {
         if (Repository.GITLET_DIR.exists()) {

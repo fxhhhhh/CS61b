@@ -9,7 +9,7 @@ import static gitlet.Utils.*;
  *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ * @author Xihan Fu
  */
 public class Repository {
     /**
@@ -26,4 +26,18 @@ public class Repository {
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
     /* TODO: fill in the rest of this class. */
+    /** the stage file. */
+    static final File STAGE = Utils.join(GITLET_DIR, "STAGE");
+
+    /** the blobs' folder. */
+    static final File BLOBS_FOLDER = Utils.join(GITLET_DIR, "blobs");
+
+    /** the gitlet file. */
+    static final File GITLET = Utils.join(GITLET_DIR, "GITLET");
+
+    /** the commits' folder. */
+    static final File COMMITS_FOLDER = Utils.join(GITLET_DIR, "commits");
+
+
+
 }

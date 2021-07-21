@@ -236,7 +236,7 @@ class Utils {
         System.out.printf(msg, args);
         System.out.println();
     }
-    public static void exitWithMsg(String message) {
+    public static void exitWithError(String message) {
         if (message != null && !message.equals("")) {
             System.out.println(message);
         }

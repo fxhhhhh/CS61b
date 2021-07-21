@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Driver class for Gitlet, a subset of the Git version-control system.
  *
- * @author Xihan Fu
+ * @author TODO
  */
 public class Main {
 
@@ -13,92 +13,65 @@ public class Main {
      * Usage: java gitlet.Main ARGS, where ARGS contains
      * <COMMAND> <OPERAND1> <OPERAND2> ...
      */
-    /**
-     * The gitlet.
-     */
-    private static Gitlet gitlet;
-
     public static void main(String[] args) {
         // TODO: what if args is empty?
         if (args.length == 0) {
-            Utils.exitWithMsg("Please enter a command.");
+            Utils.exitWithError("Please enter a command.");
         }
-        if (args[0].equals("init")) {
-            if (args.length > 1) {
-                Utils.exitWithMsg("Incorrect operands.");
-            } else {
-                init();
-            }
-        } else {
-            gitlet = Utils.readObject(Repository.GITLET, Gitlet.class);
-        switch (args[0]) {
+        String firstArg = args[0];
+        switch (firstArg) {
+            case "init":
+                // TODO: handle the `init` command
+                if (args.length > 1) {
+                    Utils.exitWithError("Incorrect operands.");
+                } else {
+                    init();
+                }
+                break;
             case "add":
                 // TODO: handle the `add [filename]` command
-                add(args);
+                if (args.length == 1) {
+                    Utils.exitWithError("Incorrect operands.");
+                } else {
+                    add(args);
+                }
                 break;
             // TODO: FILL THE REST IN
-            case "checkout":
-                checkout(args);
-                break;
             case "commit":
+                if(args.length==1){
+                    Utils.exitWithError("Please enter a commit message.");
+                }
+                if(args.length>2){
+                    Utils.exitWithError("Incorrect operands.");
+                }
                 commit(args);
                 break;
-            case "log":
-                log(args);
-                break;
-            default:
-                Utils.exitWithMsg("No command with that name exists.");
         }
-    }}
+
+    }
+
 
     private static void init() {
-        if (Repository.GITLET_DIR.exists()) {
-            Utils.exitWithMsg("A Gitlet version-control system already exists in the current directory.");
-        } else {
+        if (!Repository.GITLET.exists()) {
             Repository.GITLET_DIR.mkdir();
-            gitlet = new Gitlet();
-            gitlet.init();
-        }
-    }
-
-    private static void add(String[] args) {
-        if (args.length == 1) {
-            Utils.exitWithMsg("Incorrect operands.");
-        }
-        for (int i = 1; i < args.length; i++) {
-            gitlet.add(args[i]);
-        }
-    }
-
-    private static void commit(String[] args) {
-        if (args.length == 1 || args[1].length() == 0) {
-            Utils.exitWithMsg("Please enter a commit message.");
-        } else if (args.length > 2) {
-            Utils.exitWithMsg("Incorrect operands.");
+            Repository.gitlet = new Gitlet();
+            Repository.gitlet.init();
         } else {
-            gitlet.commit(args[1]);
+            Utils.exitWithError("A Gitlet version-control system already exists in the current directory.");
         }
     }
-
-    private static void checkout(String[] args) {
-        if (args.length == 2) {
-            gitlet.checkoutBranch(args[1]);
-        } else if (args.length == 3 && args[1].equals("--")) {
-            gitlet.checkout(args[2]);
-        } else if (args.length == 4 && args[2].equals("--")) {
-            gitlet.checkout(args[1], args[3]);
-        } else {
-            Utils.exitWithMsg("Incorrect operands.");
+    private static void add(String[] args){
+        for (String arg : args) {
+            File file = Utils.join(Repository.CWD, arg);
+            if (!file.exists()) {
+                Utils.exitWithError("File does not exist.");
+            }
+        }
+        for (String arg : args) {
+            Repository.gitlet.add(arg);
         }
     }
-
-    private static void log(String[] args) {
-        if (args.length != 1) {
-            Utils.exitWithMsg("Incorrect operands.");
-        } else {
-            gitlet.log();
-        }
+    private static void commit(String[] args){
+        Repository.gitlet.commit(args[1]);
     }
-
-
 }

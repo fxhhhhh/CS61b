@@ -47,13 +47,22 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         if (r.getItemCount() == 1) {
             // TODO: Replace with code to create a 2 node equivalent
-            return null
+           RBTreeNode a = new RBTreeNode(true,r.getItemAt(0) );
+           a.left = buildRedBlackTree(r.getChildAt(0));
+           a.right=buildRedBlackTree(r.getChildAt(1));
+           return a;
         } else if (r.getItemCount() == 2) {
             // TODO: Replace with code to create a 3 node equivalent
-            return null
+            RBTreeNode a = new RBTreeNode(true,r.getItemAt(1) );
+            a.right=buildRedBlackTree(r.getChildAt(2));
+            a.left=new RBTreeNode(false,r.getItemAt(0),buildRedBlackTree(r.getChildAt(0)),buildRedBlackTree(r.getChildAt(1)));
+            return a;
         } else {
             // TODO: Replace with code to create a 4 node equivalent
-            return null
+            RBTreeNode a = new RBTreeNode(true,r.getItemAt(1) );
+            a.right=new RBTreeNode(false,r.getItemAt(2) ,buildRedBlackTree(r.getChildAt(2)),buildRedBlackTree(r.getChildAt(3)));
+            a.left=new RBTreeNode(false,r.getItemAt(0),buildRedBlackTree(r.getChildAt(0)),buildRedBlackTree(r.getChildAt(1)));
+            return a;
         }
     }
 
@@ -69,14 +78,20 @@ public class RedBlackTree<T extends Comparable<T>> {
        this subtree. */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode temp = new RBTreeNode(node.isBlack,node.left.item,node.left.left,node);
+        node.left=node.left.right;
+        node.isBlack=false;
+        return temp;
     }
 
     /* Rotates the given node NODE to the left. Returns the new root node of
        this subtree. */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode temp = new RBTreeNode(node.isBlack,node.right.item,node,node.right.right);
+        node.right=node.right.left;
+        node.isBlack=false;
+        return temp;
     }
 
     public void insert(T item) {   

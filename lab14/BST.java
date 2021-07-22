@@ -1,5 +1,5 @@
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class BST<T> {
 
@@ -14,7 +14,28 @@ public class BST<T> {
        and ITER will contain objects that will be the item of each BSTNode. */
     private BSTNode<T> sortedIterToTree(Iterator<T> iter, int N) {
         // TODO: YOUR CODE HERE
-        return null;
+        root = sortedIterToTreeHelper(iter, N);
+        return root;
+    }
+
+    private BSTNode<T> sortedIterToTreeHelper(Iterator<T> iter, int N) {
+        if (N == 0) {
+            return null;
+        }
+        if (N == 1) {
+            return new BSTNode<>(iter.next());
+        }
+        if (N == 2) {
+            BSTNode temp = new BSTNode<>(iter.next());
+            temp.right = new BSTNode<>(iter.next());
+            return temp;
+        } else {
+            BSTNode left = sortedIterToTree(iter, N / 2);
+            BSTNode temp = new BSTNode<>(iter.next());
+            temp.left=left;
+            temp.right = sortedIterToTree(iter, N / 2-1 );
+            return temp;
+        }
     }
 
     /* Prints the tree represented by ROOT. */
@@ -43,4 +64,5 @@ public class BST<T> {
             this.item = item;
         }
     }
+
 }

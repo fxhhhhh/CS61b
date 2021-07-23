@@ -116,9 +116,6 @@ public class RedBlackTree<T extends Comparable<T>> {
             node.right = insert(node.right, item);
         }
         // handle case C and "Right-leaning" situation.
-        if (node.isBlack && !node.right.isBlack && node.left == null) {
-            node=rotateRight(node);
-        }
         // handle case B
         if (node.isBlack && !node.left.isBlack && !node.left.left.isBlack) {
             node=rotateRight(node);

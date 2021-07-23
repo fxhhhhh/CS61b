@@ -117,9 +117,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         }
         // handle case C and "Right-leaning" situation.
         if (node.isBlack && !node.right.isBlack && node.left == null) {
-            node.isBlack=false;
-            node.right.isBlack=true;
-            node.left.isBlack=true;
+            node=rotateRight(node);
         }
         // handle case B
         if (node.isBlack && !node.left.isBlack && !node.left.left.isBlack) {
@@ -128,7 +126,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         // handle case A
         if (node.isBlack && !node.right.isBlack && !node.left.isBlack) {
-            node = rotateLeft(node);
+            flipColors(node);
         }
 
         // TODO: YOUR CODE HERE

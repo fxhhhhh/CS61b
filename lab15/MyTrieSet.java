@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,19 +60,23 @@ public class MyTrieSet implements TrieSet61BL {
 
     @Override
     public List<String> keysWithPrefix(String prefix) {
-        List allWords = null;
+        List<String> allWords = new ArrayList();
         Node curr = root;
         for (int i = 0, n = prefix.length(); i < n; i++) {
             char c = prefix.charAt(i);
             curr = (Node) curr.map.get(c);
         }
         for (Object element : curr.map.keySet()) {
-            keysWithPrefixHelper((String) element, allWords, (Node) curr.map.get(element));
+            String a;
+            a= Character.toString((Character) element);
+            keysWithPrefixHelper(a, allWords, (Node) curr.map.get(element));
         }
+        List<String> result = new ArrayList();
         for (Object element : allWords) {
             element = prefix + element;
+            result.add((String) element);
         }
-        return allWords;
+        return result;
     }
 
     public void keysWithPrefixHelper(String s, List<String> x, Node n) {

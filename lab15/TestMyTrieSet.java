@@ -25,32 +25,40 @@ public class TestMyTrieSet {
     // assumes add works
     @Test
     public void sanityContainsTest() {
-        // MyTrieSet t = new MyTrieSet();
-        // assertFalse(t.contains("waterYouDoingHere"));
-        // t.add("waterYouDoingHere");
-        // assertTrue(t.contains("waterYouDoingHere"));
+         MyTrieSet t = new MyTrieSet();
+         assertFalse(t.contains("waterYouDoingHere"));
+         t.add("waterYouDoingHere");
+         assertTrue(t.contains("waterYouDoingHere"));
     }
 
     // assumes add works
     @Test
     public void sanityPrefixTest() {
-        // String[] saStrings = new String[]{"same", "sam", "sad", "sap"};
-        // String[] otherStrings = new String[]{"a", "awls", "hello"};
+         String[] saStrings = new String[]{"same", "sam", "sad", "sap"};
+         String[] otherStrings = new String[]{"a", "awls", "hello"};
 
-        // MyTrieSet t = new MyTrieSet();
-        // for (String s: saStrings) {
-        //     t.add(s);
-        // }
-        // for (String s: otherStrings) {
-        //     t.add(s);
-        // }
+         MyTrieSet t = new MyTrieSet();
+         for (String s: saStrings) {
+             t.add(s);
+         }
+         for (String s: otherStrings) {
+             t.add(s);
+         }
 
-        // List<String> keys = t.keysWithPrefix("sa");
-        // for (String s: saStrings) {
-        //     assertTrue(keys.contains(s));
-        // }
-        // for (String s: otherStrings) {
-        //     assertFalse(keys.contains(s));
-        // }
+         List<String> keys = t.keysWithPrefix("sa");
+         for (String s: saStrings) {
+             assertTrue(keys.contains(s));
+         }
+         for (String s: otherStrings) {
+             assertFalse(keys.contains(s));
+         }
+    }
+    @Test
+    public void collisionTest(){
+        MyTrieSet t = new MyTrieSet();
+        t.add("CATB");
+        t.add("CATA");
+        assertTrue(t.contains("CATB"));
+        assertTrue(t.contains("CATA"));
     }
 }

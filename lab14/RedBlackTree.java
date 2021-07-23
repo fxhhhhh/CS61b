@@ -130,7 +130,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             flipColors(node);
         }
 
-        if (node.isBlack && !node.right.isBlack && node.left.isBlack) {
+        if (node.right.isBlack && node.left.isBlack) {
             node=rotateRight(node);
         }
         // TODO: YOUR CODE HERE

@@ -1,18 +1,30 @@
 package gitlet;
 
+// TODO: any imports you need here
+
 import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.ParseException;
+
+/** Represents a gitlet commit object.
+ *  TODO: It's a good idea to give a description here of what else this Class
+ *  does at a high level.
  *
  *  @author Xihan Fu
  */
 public class Commit implements Serializable {
+    /**
+     * TODO: add instance variables here.
+     *
+     * List all instance variables of the Commit class here with a useful
+     * comment above them describing what that variable represents and how that
+     * variable is used. We've provided one example for `message`.
+     */
     /** the log message. */
     private String _logMsg;
     /** the timestamp. */
@@ -26,20 +38,15 @@ public class Commit implements Serializable {
     private List<String> _parentCommits;
     /** sha-1 code. */
     private String _sha1;
+    /** The message of this Commit. */
+    private String message;
 
-
-    /**
-     * Constructor.
-     * @param filesInfo files' info
-     * @param logMsg log message
-     * @param timestamp timestamp
-     * @param parentCommits the parent commits
-     */
+    /* TODO: fill in the rest of this class. */
     Commit(Map<String, String> filesInfo,
            String logMsg, String timestamp, List<String> parentCommits) {
         for (String filename : filesInfo.keySet()) {
             if (!filesInfo.get(filename).equals("-")) {
-                File file = Utils.join(Main.CWD, filename);
+                File file = Utils.join(Repository.CWD, filename);
                 assert file.exists();
                 Blob blob = new Blob(file);
                 blob.save();
@@ -54,22 +61,6 @@ public class Commit implements Serializable {
     }
 
     /**
-     * get files' info in this commit.
-     * @return files' info
-     */
-    Map<String, String> getFilesInfo() {
-        return _filesInfo;
-    }
-
-    /**
-     * get the parent commits.
-     * @return the parent commits
-     */
-    List<String> getParentCommits() {
-        return _parentCommits;
-    }
-
-    /**
      * get the sha-1 code.
      * @return the sha-1 code
      */
@@ -77,64 +68,23 @@ public class Commit implements Serializable {
         return _sha1;
     }
 
-    /**
-     * get the timestamp.
-     * @return the timestamp
-     */
-    String getTimestamp() {
-        Date date = null;
-        try {
-            date = Gitlet.DATE_FORMAT_MS.parse(_timestamp);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public void checkout() {
+        for (String filename : _filesInfo.keySet()) {
+            checkout(filename);
         }
-
-        return Gitlet.DATE_FORMAT.format(date);
-    }
-
-    /**
-     * get log message.
-     * @return log message
-     */
-    String getLogMessage() {
-        return _logMsg;
-    }
-
-    /**
-     * save this commit to disk.
-     */
-    void save() {
-        File commit = Utils.join(Main.COMMITS_FOLDER, _sha1);
-        if (!commit.exists()) {
-            try {
-                commit.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        for (String filename : Utils.plainFilenamesIn(Repository.CWD)) {
+            if (!_filesInfo.containsKey(filename)) {
+                File file = Utils.join(Repository.CWD, filename);
+                Utils.restrictedDelete(filename);
             }
         }
-        Utils.writeObject(commit, this);
     }
-
-
-    /**
-     * get the file sha-1 code.
-     * @param filename the filename
-     * @return the sha-1 code
-     */
-    String getFileSha1InCommit(String filename) {
-        return _filesInfo.get(filename);
-    }
-
-    /**
-     * checkout a single file by its name.
-     * @param filename the filename
-     */
     public void checkout(String filename) {
         if (!_filesInfo.get(filename).equals("-")) {
             File blobFile =
-                    Utils.join(Main.BLOBS_FOLDER, _filesInfo.get(filename));
+                    Utils.join(Repository.BLOBS_FOLDER, _filesInfo.get(filename));
             Blob blob = Utils.readObject(blobFile, Blob.class);
-            File file = Utils.join(Main.CWD, filename);
+            File file = Utils.join(Repository.CWD, filename);
             if (!file.exists()) {
                 try {
                     file.createNewFile();
@@ -147,26 +97,40 @@ public class Commit implements Serializable {
             Utils.restrictedDelete(filename);
         }
     }
+    String getTimestamp() {
+        Date date = null;
+        try {
+            date = Gitlet.DATE_FORMAT_MS.parse(_timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-    /**
-     * checkout all files in this commit.
-     */
-    public void checkout() {
-        for (String filename : _filesInfo.keySet()) {
-            checkout(filename);
-        }
-        for (String filename : Utils.plainFilenamesIn(Main.CWD)) {
-            if (!_filesInfo.containsKey(filename)) {
-                File file = Utils.join(Main.CWD, filename);
-                Utils.restrictedDelete(filename);
-            }
-        }
+        return Gitlet.DATE_FORMAT.format(date);
+    }
+    String getLogMessage() {
+        return _logMsg;
     }
 
-    /**
-     * get the timestamp in ms.
-     * @return timestamp in ms
-     */
+    void save() {
+        File commit = Utils.join(Repository.COMMITS_FOLDER, _sha1);
+        if (!commit.exists()) {
+            try {
+                commit.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.writeObject(commit, this);
+    }
+    String getFileSha1InCommit(String filename) {
+        return _filesInfo.get(filename);
+    }
+    Map<String, String> getFilesInfo() {
+        return _filesInfo;
+    }
+    List<String> getParentCommits() {
+        return _parentCommits;
+    }
     public String getMSTimestamp() {
         return _timestamp;
     }

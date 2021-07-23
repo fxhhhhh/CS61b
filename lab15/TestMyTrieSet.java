@@ -10,16 +10,16 @@ public class TestMyTrieSet {
     // assumes add/contains work
     @Test
     public void sanityClearTest() {
-        // MyTrieSet t = new MyTrieSet();
-        // for (int i = 0; i < 455; i++) {
-        //     t.add("hi" + i);
-        //     //make sure put is working via contains
-        //     assertTrue(t.contains("hi" + i));
-        // }
-        // t.clear();
-        // for (int i = 0; i < 455; i++) {
-        //     assertFalse(t.contains("hi" + i));
-        // }
+         MyTrieSet t = new MyTrieSet();
+         for (int i = 0; i < 455; i++) {
+             t.add("hi" + i);
+             //make sure put is working via contains
+             assertTrue(t.contains("hi" + i));
+         }
+         t.clear();
+         for (int i = 0; i < 455; i++) {
+             assertFalse(t.contains("hi" + i));
+         }
     }
 
     // assumes add works

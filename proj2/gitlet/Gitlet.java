@@ -175,6 +175,7 @@ public class Gitlet implements Serializable {
         Commit commit = getCommit(commitID);
         checkout(commit, filename);
     }
+
     public void checkout(String filename) {
         checkout(_currentBranchHead.getSha1(), filename);
     }
@@ -228,6 +229,7 @@ public class Gitlet implements Serializable {
         _currentBranchHead = getCommit(_branches.get(_currentBranch));
         save();
     }
+
     public void checkoutCommit(String commitID) {
         Commit commit = getCommit(commitID);
         Map<String, String> fileInfo = commit.getFilesInfo();
@@ -247,6 +249,7 @@ public class Gitlet implements Serializable {
         stage.clearAll();
         stage.save();
     }
+
     public void remove(String filename) {
         stage = getStage();
         Map<String, String> currCommitFiles = _currentBranchHead.getFilesInfo();
@@ -262,6 +265,7 @@ public class Gitlet implements Serializable {
         }
         stage.save();
     }
+
     public void globalLog() {
         for (String commitID : _commits) {
             Commit commit = getCommit(commitID);
@@ -271,11 +275,12 @@ public class Gitlet implements Serializable {
 
     private void displayLog1(Commit commit) {
         System.out.println("===");
-//        System.out.println("commit " + commit.getSha1());
+        System.out.println("commit " + commit.getSha1());
         System.out.println("Date: " + commit.getTimestamp());
         System.out.println(commit.getLogMessage());
         System.out.println();
     }
+
     public void find(String message) {
         boolean notFind = true;
         for (String commitID : _commits) {
@@ -289,6 +294,7 @@ public class Gitlet implements Serializable {
             Utils.exitWithMsg("Found no commit with that message.");
         }
     }
+
     public void status() {
         stage = getStage();
         displayBranches();
@@ -342,6 +348,7 @@ public class Gitlet implements Serializable {
         displayDeletedAndModified(deletedFilenames, modifiedFilenames);
         displayUntrackedFiles(addition, filenames, filenamesInCWD);
     }
+
     private void displayBranches() {
         System.out.println("=== Branches ===");
         List<String> branches = new ArrayList<>(_branches.keySet());
@@ -354,6 +361,7 @@ public class Gitlet implements Serializable {
         }
         System.out.println();
     }
+
     private void loopForAddition(List<String> addition,
                                  List<String> deletedFilenames,
                                  List<String> modifiedFilenames) {
@@ -371,6 +379,7 @@ public class Gitlet implements Serializable {
             }
         }
     }
+
     private void displayDeletedAndModified(List<String> deletedFilenames,
                                            List<String> modifiedFilenames) {
         for (String filename : deletedFilenames) {
@@ -402,6 +411,7 @@ public class Gitlet implements Serializable {
         }
         System.out.println();
     }
+
     public void removeBranch(String branchName) {
         if (!_branches.containsKey(branchName)) {
             Utils.exitWithMsg("A branch with that name does not exist.");
@@ -412,12 +422,14 @@ public class Gitlet implements Serializable {
         _branches.remove(branchName);
         save();
     }
+
     public void reset(String commitID) {
         checkoutCommit(commitID);
         _currentBranchHead = getCommit(commitID);
         _branches.put(_currentBranch, commitID);
         save();
     }
+
     public void branch(String branchName) {
         if (_branches.containsKey(branchName)) {
             Utils.exitWithMsg("A branch with that name already exists.");
@@ -425,6 +437,7 @@ public class Gitlet implements Serializable {
         _branches.put(branchName, _currentBranchHead.getSha1());
         save();
     }
+
     public void merge(String givenBranch) {
         stage = getStage();
         if (!stage.isClear()) {
@@ -471,6 +484,7 @@ public class Gitlet implements Serializable {
             System.out.println("Encountered a merge conflict.");
         }
     }
+
     private Commit getTheSplitPoint(String givenBranch) {
         Commit currentBranchCommit = _currentBranchHead;
         Commit givenBranchCommit = getCommit(_branches.get(givenBranch));
@@ -492,6 +506,7 @@ public class Gitlet implements Serializable {
         }
         return list.get(0).getKey();
     }
+
     private Map<Commit, Integer> getTheSplitPoint(Commit currentBranchCommit,
                                                   Commit givenBranchCommit,
                                                   int lengthOfThePath) {
@@ -530,6 +545,7 @@ public class Gitlet implements Serializable {
         }
         return splitPoints;
     }
+
     private boolean isEncounteredMergeConflict(
             Commit givenBranchCommit,
             Map<String, String> theSplitPointFileInfo,
@@ -595,6 +611,7 @@ public class Gitlet implements Serializable {
         }
         return encounteredMergeConflict;
     }
+
     private void mergeConflictFile(Map<String, String> currentBranchFileInfo,
                                    Map<String, String> givenBranchFileInfo,
                                    String filename) {
@@ -617,6 +634,7 @@ public class Gitlet implements Serializable {
         Utils.writeContents(fileInConflict, content);
         stage.stagedForAddition(fileInConflict);
     }
+
     private String getConflictContent(Map<String, String> fileInfo,
                                       String filename) {
         String givenContent;
@@ -653,6 +671,7 @@ public class Gitlet implements Serializable {
         }
         return Utils.readObject(commitFile, Commit.class);
     }
+
     private void mergeSplitPoints(Map<Commit, Integer> splitPoints,
                                   Map<Commit, Integer> addition) {
         for (Map.Entry<Commit, Integer> commitEntry : addition.entrySet()) {

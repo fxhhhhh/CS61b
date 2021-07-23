@@ -30,6 +30,9 @@ public class Main {
                 init();
             }
         } else {
+            if (!Repository.GITLET.exists()) {
+                Utils.exitWithMsg("Not in an initialized Gitlet directory.");
+            }
             gitlet = Utils.readObject(Repository.GITLET, Gitlet.class);
             switch (args[0]) {
                 case "add":

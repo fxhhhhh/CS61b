@@ -32,8 +32,8 @@ public class BST<T> {
         } else {
             BSTNode left = sortedIterToTree(iter, N / 2);
             BSTNode temp = new BSTNode<>(iter.next());
-            temp.left=left;
-            temp.right = sortedIterToTree(iter, N / 2-1 );
+            temp.left = left;
+            temp.right = sortedIterToTree(iter, N - N / 2 - 1);
             return temp;
         }
     }

@@ -38,7 +38,7 @@ public class MyTrieSet implements TrieSet61BL {
                 }
             curr = (Node) curr.map.get(c);
         }
-        return true;
+        return curr.isKey;
     }
 
 

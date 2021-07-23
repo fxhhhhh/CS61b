@@ -60,5 +60,6 @@ public class TestMyTrieSet {
         t.add("CATA");
         assertTrue(t.contains("CATB"));
         assertTrue(t.contains("CATA"));
+        assertFalse(t.contains("CATATATA"));
     }
 }

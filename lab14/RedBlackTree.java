@@ -116,7 +116,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             node.right = insert(node.right, item);
         }
 
-        if (!node.right.isBlack && node.left == null && node.left != null) {
+        if (node.right != null&&!node.right.isBlack && node.left == null ) {
             node = rotateLeft(node);
         }
 
@@ -125,7 +125,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             node = rotateRight(node);
         }
 
-        if (node.left != null &&node.right!=null && !node.left.isBlack && !node.right.isBlack) {
+        if (node.left != null && node.right != null && !node.left.isBlack && !node.right.isBlack) {
             flipColors(node);
         }
 

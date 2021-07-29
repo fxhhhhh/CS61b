@@ -1,36 +1,40 @@
-import java.util.HashMap;
+//import java.util.HashMap;
 
 public class SimpleNameMap {
 
     /* TODO: Instance variables here */
+    String[] initialArray= new String[26];
 
     public SimpleNameMap() {
         // TODO: YOUR CODE HERE
-
-
+        for(int i =0 ;i<26;i++){
+            initialArray[i]=null;
+        }
     }
 
-    public static void main(String[] args) {
-Lamp a = new Lamp(1);  // a.brightness = 1
-Lamp b = new Lamp(2);  // b.brightness = 2
 
-HashMap<Lamp, Integer> map = new HashMap<>();
 
-map.put(b, 0);
-map.put(a, 1);
-map.put(a, 2);
-
-System.out.println(map.get(a));  // print statement 1
-System.out.println(map.get(b));  // print statement 2
-
-map.put(b, 3);
-a.brightness = 2;
-map.put(b, 4);
-"hello".substring()
-System.out.println(map.get(a));  // print statement 3
-System.out.println(map.get(b));  // print statement 4
-System.out.println(map.get(new Lamp(1)));
-    }
+//    public static void main(String[] args) {
+//        Lamp a = new Lamp(1);  // a.brightness = 1
+//        Lamp b = new Lamp(2);  // b.brightness = 2
+//
+//        HashMap<Lamp, Integer> map = new HashMap<>();
+//
+//        map.put(b, 0);
+//        map.put(a, 1);
+//        map.put(a, 2);
+//
+//        System.out.println(map.get(a));  // print statement 1
+//        System.out.println(map.get(b));  // print statement 2
+//
+//        map.put(b, 3);
+//        a.brightness = 2;
+//        map.put(b, 4);
+//        "hello".substring()
+//        System.out.println(map.get(a));  // print statement 3
+//        System.out.println(map.get(b));  // print statement 4
+//        System.out.println(map.get(new Lamp(1)));
+//    }
 
     static class Lamp {
         int brightness;
@@ -53,19 +57,30 @@ System.out.println(map.get(new Lamp(1)));
     /* Returns the number of items contained in this map. */
     public int size() {
         // TODO: YOUR CODE HERE
-        return 0;
+        int count = 0;
+        for (int i =0;i<26;i++){
+            if(initialArray[i]!=null){
+                count+=1;
+            }
+        }
+        return count;
     }
 
     /* Returns true if the map contains the KEY. */
     public boolean containsKey(String key) {
         // TODO: YOUR CODE HERE
-        return false;
+        if(initialArray[key.charAt(0)-'A']==null)
+            return false;
+        return true;
     }
 
     /* Returns the value for the specified KEY. If KEY is not found, return
        null. */
     public String get(String key) {
         // TODO: YOUR CODE HERE
+        if(containsKey(key)){
+            return initialArray[key.charAt(0)-'A'];
+        }
         return null;
     }
 
@@ -73,12 +88,18 @@ System.out.println(map.get(new Lamp(1)));
        SimpleNameMap, replace the current corresponding value with VALUE. */
     public void put(String key, String value) {
         // TODO: YOUR CODE HERE
+        initialArray[key.charAt(0)-'A']=value;
     }
 
     /* Removes a single entry, KEY, from this table and return the VALUE if
        successful or NULL otherwise. */
     public String remove(String key) {
         // TODO: YOUR CODE HERE
+        if(containsKey(key)){
+            String temp =initialArray[key.charAt(0)-'A'];
+            initialArray[key.charAt(0)-'A']=null;
+            return temp;
+        }
         return null;
     }
 

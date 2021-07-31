@@ -178,14 +178,12 @@ public class MinHeap<E extends Comparable<E>> {
                     break;
                 }
             }
-            setElement(index, element);
-            if (getParentOf(index) != 0 && element.compareTo(getElement(getParentOf(index))) < 0) {
+            if(contents.get(index).compareTo(element)>0){
+                setElement(index, element);
                 bubbleUp(index);
             }
-            if (getLeftOf(index) != 0 && element.compareTo(getElement(getLeftOf(index))) > 0) {
-                bubbleDown(index);
-            }
-            if (getRightOf(index) != 0 && element.compareTo(getElement(getRightOf(index))) > 0) {
+            if(contents.get(index).compareTo(element)<0){
+                setElement(index, element);
                 bubbleDown(index);
             }
         } else {
@@ -200,7 +198,7 @@ public class MinHeap<E extends Comparable<E>> {
         if (contents.contains(element)) {
             return true;
         }
-        for (int i = 1; i < size; i++) {
+        for (int i = 1; i < size(); i++) {
             if (element.equals(contents.get(i))) {
                 return true;
             }

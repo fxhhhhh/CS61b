@@ -72,7 +72,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the left child of the element at index INDEX. */
     private int getLeftOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index >= contents.size() - 1) {
+        if (2 * index > contents.size() - 1) {
             return 0;
         } else {
             return 2 * index;
@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index + 1 >= contents.size() - 1) {
+        if (2 * index + 1 > contents.size() - 1) {
             return 0;
         } else {
             return 2 * index + 1;

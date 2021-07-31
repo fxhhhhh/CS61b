@@ -80,6 +80,15 @@ public class Graph implements Iterable<Integer> {
         // TODO: YOUR CODE HERE
         return neighbors(v).size();
     }
+    public List<Integer> outNeighbor(int v){
+        List<Integer> outNeighbors = new LinkedList();
+        for (int i = 0; i < adjLists.length; i++) {
+            if (isAdjacent(v,i)) {
+                outNeighbors.add(i);
+            }
+        }
+        return outNeighbors;
+    }
 
     /* Returns an Iterator that outputs the vertices of the graph in topological
        sorted order. */
@@ -158,7 +167,7 @@ public class Graph implements Iterable<Integer> {
        START and STOP are in this graph. If START == STOP, returns true. */
     public boolean pathExists(int start, int stop) {
         // TODO: YOUR CODE HERE
-        return dfs(start).contains(stop);
+        return dfs(stop).contains(start);
     }
 
 
@@ -172,18 +181,34 @@ public class Graph implements Iterable<Integer> {
                 result.add(stop);
                 return result;
             }
-            Iterator<Integer> iter = new DFSIterator(start);
+            Iterator<Integer> iter = new DFSIterator(stop);
+            Stack<Integer> temp = new Stack<>();
             while (iter.hasNext()) {
-                int curr =iter.next();
-                result.add(curr);
-                if ( curr== stop) {
+                int curr = iter.next();
+                temp.add(curr);
+                if (curr == start) {
                     break;
+                }
+            }
+            while (!temp.isEmpty()) {
+                int a = temp.pop();
+                if (!temp.isEmpty()) {
+                    int b = temp.pop();
+                    if (isAdjacent(a, b)) {
+                        result.add(a);
+                        temp.add(b);
+                    } else {
+                        temp.add(a);
+                    }
+                } else {
+                    result.add(a);
                 }
             }
             return result;
         } else {
             return result;
         }
+
     }
 
     public List<Integer> topologicalSort() {
@@ -200,20 +225,55 @@ public class Graph implements Iterable<Integer> {
         private Stack<Integer> fringe;
 
         // TODO: Instance variables here!
+        private List<Integer> currentInDegree;
 
         TopologicalIterator() {
             fringe = new Stack<Integer>();
             // TODO: YOUR CODE HERE
+            currentInDegree = new ArrayList<>();
+            int min = 1000;
+            int minIndex = 0;
+            for (int i = 0; i < vertexCount; i++) {
+                currentInDegree.add(i, inDegree(i));
+                if (currentInDegree.get(i) < min) {
+                    min = currentInDegree.get(i);
+                    minIndex = i;
+                }
+            }
+            fringe.push(minIndex);
+
         }
 
         public boolean hasNext() {
             // TODO: YOUR CODE HERE
+            if (!fringe.isEmpty()) {
+                int i = fringe.pop();
+                currentInDegree.add(i,-1);
+                for (Integer e : neighbors(i)) {
+                    currentInDegree.add(e, currentInDegree.get(e) - 1);
+                }
+                if(currentInDegree.contains(0)) {
+                     fringe.push(i);
+                    currentInDegree.add(i,0);
+                    return true;
+                }
+                fringe.push(i);
+                currentInDegree.add(i,0);
+                return false;
+            }
             return false;
         }
 
         public Integer next() {
             // TODO: YOUR CODE HERE
-            return 0;
+            int i = fringe.pop();
+            for (Integer e : outNeighbor(i)) {
+                currentInDegree.add(e, currentInDegree.get(e) - 1);
+                if (currentInDegree.get(e) == 0) {
+                    fringe.push(e);
+                }
+            }
+            return i;
         }
 
         public void remove() {
@@ -313,22 +373,22 @@ public class Graph implements Iterable<Integer> {
     }
 
     public static void main(String[] args) {
-        Graph g1 = new Graph(5);
-        g1.generateG1();
-        g1.printDFS(0);
-        g1.printDFS(2);
-        g1.printDFS(3);
-        g1.printDFS(4);
+//        Graph g1 = new Graph(5);
+//        g1.generateG1();
+//        g1.printDFS(0);
+//        g1.printDFS(2);
+//        g1.printDFS(3);
+//        g1.printDFS(4);
+//
+//        g1.printPath(0, 3);
+//        g1.printPath(0, 4);
+//        g1.printPath(1, 3);
+//        g1.printPath(1, 4);
+//        g1.printPath(4, 0);
 
-        g1.printPath(0, 3);
-        g1.printPath(0, 4);
-        g1.printPath(1, 3);
-        g1.printPath(1, 4);
-        g1.printPath(4, 0);
-
-//        Graph g2 = new Graph(5);
-//        g2.generateG2();
-//        g2.printTopologicalSort();
+        Graph g2 = new Graph(5);
+        g2.generateG2();
+        g2.printTopologicalSort();
     }
 
     public void traverse() {

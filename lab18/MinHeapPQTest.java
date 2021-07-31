@@ -8,18 +8,19 @@ public class MinHeapPQTest {
         MinHeapPQ test=new MinHeapPQ<>();
         int size = test.size();
         assertEquals(size,0);
-        test.insert('a',0);
-        test.insert('b',1);
-        test.insert('c',2);
-        test.insert('d',3);
-        test.insert('e',4);
-        test.insert('f',5);
-        assertTrue(test.contains('a'));
-        assertFalse(test.contains('g'));
-        test.changePriority('a',6);
-        System.out.println(test.peek());
-        test.changePriority('f',0);
-        System.out.println(test.peek());
+        for (int i=1;i<10;i++)
+        {
+            test.insert(10-i,10-i);
+        }
+        MinHeap<Integer> h = new MinHeap<Integer>();
+        for (int i=1;i<10;i++)
+        {
+            h.insert(10-i);
+        }
+        for (int i=1;i<10;i++)
+        {
+            assertEquals(test.poll(),h.removeMin());
+        }
 
     }
 }

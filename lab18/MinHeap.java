@@ -72,7 +72,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the left child of the element at index INDEX. */
     private int getLeftOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index >= contents.size()) {
+        if (2 * index >= contents.size()-1) {
             return 0;
         } else {
             return 2 * index;
@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index + 1 >= contents.size()) {
+        if (2 * index + 1 >= contents.size()-1) {
             return 0;
         } else {
             return 2 * index + 1;
@@ -92,8 +92,8 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the parent of the element at index INDEX. */
     private int getParentOf(int index) {
         // TODO: YOUR CODE HERE
-        if (index >= contents.size()) {
-            return 0;
+        if (index == 1) {
+            return 1;
         } else {
             return index / 2;
         }
@@ -118,39 +118,22 @@ public class MinHeap<E extends Comparable<E>> {
     /* Bubbles up the element currently at index INDEX. */
     private void bubbleUp(int index) {
         // TODO: YOUR CODE HERE
-        while (index != 1 && contents.get(index).compareTo(contents.get(getParentOf(index))) < 0) {
+        while (contents.get(index).compareTo(contents.get(getParentOf(index))) < 0) {
             swap(index, getParentOf(index));
             index = getParentOf(index);
-        }
-        if (index - 1 != 0) {
-            if (min(index, index - 1) == index) {
-                swap(index - 1, index);
-            }
         }
     }
 
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
         // TODO: YOUR CODE HERE
-        int count = 0;
-        while (true) {
-            int pre = count;
-            if (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
-                swap(index, getLeftOf(index));
-                index = getLeftOf(index);
-                count++;
-            }
-            if (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
-                swap(index, getRightOf(index));
-                index = getRightOf(index);
-                count++;
-            }
-            if (count == pre) {
-                break;
-            }
-
+        while (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
+            swap(index, getRightOf(index));
+            index = getRightOf(index);
         }
+
     }
+
 
     /* Returns the number of elements in the MinHeap. */
     public int size() {

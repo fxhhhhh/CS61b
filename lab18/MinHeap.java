@@ -128,21 +128,18 @@ public class MinHeap<E extends Comparable<E>> {
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
         // TODO: YOUR CODE HER
-        boolean flag=true;
-        while (flag){
-            flag=false;
-            if(getRightOf(index)!=0&&getElement(index).compareTo(getElement(getRightOf(index)))>0){
-                swap(index, getRightOf(index));
-                flag=true;
-                index=getRightOf(index);
+        while (getLeftOf(index)!=0){
+            int child=getLeftOf(index);
+            if(getRightOf(index)!=0&&getElement(getLeftOf(index)).compareTo(getElement(getRightOf(index)))>0){
+                child=getRightOf(index);
             }
-            if(getLeftOf(index)!=0&&getElement(index).compareTo(getElement(getLeftOf(index)))>0){
-                swap(index,getLeftOf(index));
-                flag=true;
-                getLeftOf(index);
+            if(getElement(index).compareTo(getElement(child))<0){
+                break;
             }
-        }
+            swap(index,child);
+            index=child;
 
+        }
     }
 
 

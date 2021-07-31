@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index +1 >= contents.size()) {
+        if (2 * index + 1 >= contents.size()) {
             return 0;
         } else {
             return 2 * index + 1;
@@ -122,18 +122,33 @@ public class MinHeap<E extends Comparable<E>> {
             swap(index, getParentOf(index));
             index = getParentOf(index);
         }
+        if (index - 1 != 0) {
+            if (min(index, index - 1) == index) {
+                swap(index - 1, index);
+            }
+        }
     }
 
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
         // TODO: YOUR CODE HERE
-        while (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
-            swap(index, getLeftOf(index));
-            index = getLeftOf(index);
-        }
-        while (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
-            swap(index, getRightOf(index));
-            index = getRightOf(index);
+        int count = 0;
+        while (true) {
+            int pre = count;
+            if (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
+                swap(index, getLeftOf(index));
+                index = getLeftOf(index);
+                count++;
+            }
+            if (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
+                swap(index, getRightOf(index));
+                index = getRightOf(index);
+                count++;
+            }
+            if (count == pre) {
+                break;
+            }
+
         }
     }
 
@@ -181,29 +196,29 @@ public class MinHeap<E extends Comparable<E>> {
                 }
             }
             setElement(index, element);
-            if (getParentOf(index)!=0&&element.compareTo(getElement(getParentOf(index))) < 0) {
+            if (getParentOf(index) != 0 && element.compareTo(getElement(getParentOf(index))) < 0) {
                 bubbleUp(index);
             }
-            if (getLeftOf(index) != 0&&element.compareTo(getElement(getLeftOf(index))) > 0) {
+            if (getLeftOf(index) != 0 && element.compareTo(getElement(getLeftOf(index))) > 0) {
                 bubbleDown(index);
             }
-            if (getRightOf(index) != 0&&element.compareTo(getElement(getRightOf(index))) > 0) {
+            if (getRightOf(index) != 0 && element.compareTo(getElement(getRightOf(index))) > 0) {
                 bubbleDown(index);
             }
-        }else {
-        throw new NoSuchElementException();
-    }}
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
 
     /* Returns true if ELEMENT is contained in the MinHeap. Item equality should
        be checked using .equals(), not ==. */
     public boolean contains(E element) {
         // TODO: YOUR CODE HERE
-        if(contents.contains(element)){
+        if (contents.contains(element)) {
             return true;
         }
-        for (int i = 1; i < size; i ++) {
-            if(element.equals(contents.get(i)))
-            {
+        for (int i = 1; i < size; i++) {
+            if (element.equals(contents.get(i))) {
                 return true;
             }
         }

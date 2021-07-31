@@ -183,10 +183,17 @@ public class MinHeap<E extends Comparable<E>> {
         // TODO: YOUR CODE HERE
         if (contains(element)) {
             int index = 0;
-            index = getIndex(element);;
+            index = getIndex(element);
+            E pre=getElement(index);
             setElement(index,element);
-            bubbleUp(index);
-            bubbleDown(index);
+            if(pre.compareTo(element)>0){
+                bubbleUp(index);
+                bubbleDown(index);
+            }
+            if(pre.compareTo(element)<0){
+                bubbleDown(index);
+            }
+
         } else {
             throw new NoSuchElementException();
         }

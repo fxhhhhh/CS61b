@@ -34,9 +34,9 @@ public class MinHeapPQTest {
         {
             test.insert(10-i,10-i);
         }
-        test.changePriority(1,10);
-        test.changePriority(9,1);
-        assertEquals(9,test.poll());
+        for (int i =1;i<10;i++){
+            test.changePriority(10-i,i);
+        }
 
     }
 }

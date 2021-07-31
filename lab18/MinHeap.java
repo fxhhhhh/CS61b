@@ -72,7 +72,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the left child of the element at index INDEX. */
     private int getLeftOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2*index >= contents.size()) {
+        if (2 * index >= contents.size()) {
             return 0;
         } else {
             return 2 * index;
@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (index >= contents.size()-1) {
+        if (index >= contents.size() - 1) {
             return 0;
         } else {
             return 2 * index + 1;
@@ -127,7 +127,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
         // TODO: YOUR CODE HERE
-        while (getLeftOf(index) !=0 &&contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0){
+        while (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
             swap(index, getLeftOf(index));
             index = getLeftOf(index);
         }
@@ -148,17 +148,17 @@ public class MinHeap<E extends Comparable<E>> {
         }
         setElement(size(), element);
         bubbleUp(size() - 1);
-        size+=1;
+        size += 1;
     }
 
     /* Returns and removes the smallest element in the MinHeap. */
     public E removeMin() {
         // TODO: YOUR CODE HERE
         E min = contents.get(1);
-        swap(1, contents.size()-1);
+        swap(1, contents.size() - 1);
         contents.remove(contents.size() - 1);
         bubbleDown(1);
-        size-=1;
+        size -= 1;
         return min;
     }
 
@@ -168,31 +168,34 @@ public class MinHeap<E extends Comparable<E>> {
        should be checked using .equals(), not ==. */
     public void update(E element) {
         // TODO: YOUR CODE HERE
-        if(contains(element)){
+        if (contains(element)) {
             int index = 0;
-            for (int i=1 ;i<size();i++){
-                if(element.equals(contents.get(i))){
-                    index=i;
+            for (int i = 1; i < size(); i++) {
+                if (element.equals(contents.get(i))) {
+                    index = i;
                     break;
                 }
             }
-            setElement(index,element);
-            if(element.compareTo(getElement(getParentOf(index)))<0){
+            setElement(index, element);
+            if (getParentOf(index)!=0&&element.compareTo(getElement(getParentOf(index))) < 0) {
                 bubbleUp(index);
             }
-            if(element.compareTo(getElement(getLeftOf(index)))>0||element.compareTo(getElement(getRightOf(index)))>0){
+            if (getLeftOf(index) != 0&&element.compareTo(getElement(getLeftOf(index))) > 0) {
                 bubbleDown(index);
             }
-        }
+        }else {
         throw new NoSuchElementException();
-    }
+    }}
 
     /* Returns true if ELEMENT is contained in the MinHeap. Item equality should
        be checked using .equals(), not ==. */
     public boolean contains(E element) {
         // TODO: YOUR CODE HERE
-        if (contents.contains(element)) {
-            return true;
+        for (int i = 0; i < size; i ++) {
+            if(element.equals(contents.get(i)))
+            {
+                return true;
+            }
         }
         return false;
     }

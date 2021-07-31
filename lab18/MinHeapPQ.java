@@ -22,7 +22,7 @@ public class MinHeapPQ<T> implements PriorityQueue<T> {
        ITEM is already in the MinHeapPQ, throw an IllegalArgumentException. */
     public void insert(T item, double priorityValue) {
         // TODO: YOUR CODE HERE
-        heap.insert(new PriorityItem(item,priorityValue));
+        heap.insert(new PriorityItem(item, priorityValue));
     }
 
     /* Returns the item with the highest priority (smallest priority value), and
@@ -37,10 +37,11 @@ public class MinHeapPQ<T> implements PriorityQueue<T> {
        is not in the MinHeapPQ, throw a NoSuchElementException. */
     public void changePriority(T item, double priorityValue) {
         // TODO: YOUR CODE HERE
-        if(contains(item)){
-            heap.update(new PriorityItem(item,priorityValue));
+        if (contains(item)) {
+            heap.update(new PriorityItem(item, priorityValue));
+        } else {
+            throw new NoSuchElementException();
         }
-        throw new NoSuchElementException();
     }
 
     /* Returns the number of items in the MinHeapPQ. */

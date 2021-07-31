@@ -118,9 +118,10 @@ public class MinHeap<E extends Comparable<E>> {
     /* Bubbles up the element currently at index INDEX. */
     private void bubbleUp(int index) {
         // TODO: YOUR CODE HERE
-        while (contents.get(index).compareTo(contents.get(getParentOf(index))) < 0) {
+        if (getParentOf(index)!=0&&contents.get(index).compareTo(contents.get(getParentOf(index))) < 0) {
             swap(index, getParentOf(index));
-            index = getParentOf(index);
+            int parent = getParentOf(index);
+            bubbleUp(parent);
         }
 
     }
@@ -179,13 +180,13 @@ public class MinHeap<E extends Comparable<E>> {
     public void update(E element) {
         // TODO: YOUR CODE HERE
         if (contains(element)) {
-            int index = 0;
-            index = getIndex(element);
+            int index = getIndex(element);
             E pre=getElement(index);
             setElement(index,element);
             if(pre.compareTo(element)>0){
                 bubbleUp(index);
-                bubbleDown(index);
+                int index1= getIndex(element);
+                bubbleDown(index1);
             }
             if(pre.compareTo(element)<0){
                 bubbleDown(index);

@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (index >= contents.size() - 1) {
+        if (2 * index +1 >= contents.size()) {
             return 0;
         } else {
             return 2 * index + 1;
@@ -130,6 +130,10 @@ public class MinHeap<E extends Comparable<E>> {
         while (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
             swap(index, getLeftOf(index));
             index = getLeftOf(index);
+        }
+        while (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
+            swap(index, getRightOf(index));
+            index = getRightOf(index);
         }
     }
 
@@ -181,6 +185,9 @@ public class MinHeap<E extends Comparable<E>> {
                 bubbleUp(index);
             }
             if (getLeftOf(index) != 0&&element.compareTo(getElement(getLeftOf(index))) > 0) {
+                bubbleDown(index);
+            }
+            if (getRightOf(index) != 0&&element.compareTo(getElement(getRightOf(index))) > 0) {
                 bubbleDown(index);
             }
         }else {

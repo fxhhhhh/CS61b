@@ -16,6 +16,10 @@ public class MinHeapPQTest {
         test.insert('f',5);
         assertTrue(test.contains('a'));
         assertFalse(test.contains('g'));
+        test.changePriority('a',6);
+        System.out.println(test.peek());
+        test.changePriority('f',0);
+        System.out.println(test.peek());
 
     }
 }

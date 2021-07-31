@@ -168,10 +168,17 @@ public class Graph implements Iterable<Integer> {
        START and STOP are in this graph. If START == STOP, returns true. */
     public boolean pathExists(int start, int stop) {
         // TODO: YOUR CODE HERE
-        if(path(start,stop).size()==0){
-            return false;
+        Map<Integer,Boolean> visitedMap = new HashMap<>();
+        if (start == stop) {
+            return true ;
         }
-        return true;
+        visitedMap.put(stop, true );
+        for (int neighbor:neighbors(stop)){
+            if (!visitedMap.containsKey(neighbor) && pathExists(start,neighbor)) {
+                return true ;
+            }
+        }
+        return false;
     }
 
 
@@ -180,35 +187,38 @@ public class Graph implements Iterable<Integer> {
     public List<Integer> path(int start, int stop) {
         // TODO: YOUR CODE HERE
         ArrayList<Integer> result = new ArrayList<Integer>();
-        if (start == stop) {
-            result.add(stop);
+        if (pathExists(start, stop)) {
+            if (start == stop) {
+                result.add(stop);
+                return result;
+            }
+            Iterator<Integer> iter = new DFSIterator(stop);
+            Stack<Integer> temp = new Stack<>();
+            while (iter.hasNext()) {
+                int curr = iter.next();
+                temp.add(curr);
+                if (curr == start) {
+                    break;
+                }
+            }
+            while (!temp.isEmpty()) {
+                int a = temp.pop();
+                if (!temp.isEmpty()) {
+                    int b = temp.pop();
+                    if (isAdjacent(a, b)) {
+                        result.add(a);
+                        temp.add(b);
+                    } else {
+                        temp.add(a);
+                    }
+                } else {
+                    result.add(a);
+                }
+            }
+            return result;
+        } else {
             return result;
         }
-        Iterator<Integer> iter = new DFSIterator(stop);
-        Stack<Integer> temp = new Stack<>();
-        while (iter.hasNext()) {
-            int curr = iter.next();
-            temp.add(curr);
-            if (curr == start) {
-                break;
-            }
-        }
-        while (!temp.isEmpty()) {
-            int a = temp.pop();
-            if (!temp.isEmpty()) {
-                int b = temp.pop();
-                if (isAdjacent(a, b)) {
-                    result.add(a);
-                    temp.add(b);
-                } else {
-                    temp.add(a);
-                }
-            } else {
-                result.add(a);
-            }
-        }
-        return result;
-
 
     }
 
@@ -375,14 +385,12 @@ public class Graph implements Iterable<Integer> {
 
     public static void main(String[] args) {
         Graph g1 = new Graph(5);
-        g1.generateG4();
-        for (int i = 0; i < 5; i++) {
+        g1.addEdge(1,2);
+        for (int i =0;i<5;i++) {
             g1.printDFS(i);
         }
-        g1.printPath(0, 1);
-        g1.printPath(0, 2);
-        g1.printPath(0, 3);
-        g1.printPath(0, 4);
+        g1.printPath(1,2);
+        g1.printPath(2,1);
 //        Graph g2 = new Graph(5);
 //        g2.generateG2();
 //        g2.printTopologicalSort();

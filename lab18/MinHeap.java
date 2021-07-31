@@ -127,21 +127,22 @@ public class MinHeap<E extends Comparable<E>> {
 
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
-        // TODO: YOUR CODE HERE
-        boolean flag = false;
-        while (flag) {
+        // TODO: YOUR CODE HER
+        boolean flag=true;
+        while (flag){
             flag=false;
-            while (getRightOf(index) != 0 && contents.get(index).compareTo(contents.get(getRightOf(index))) > 0) {
+            if(getRightOf(index)!=0&&getElement(index).compareTo(getElement(getRightOf(index)))>0){
                 swap(index, getRightOf(index));
-                index = getRightOf(index);
                 flag=true;
+                index=getRightOf(index);
             }
-            while (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
-                swap(index, getLeftOf(index));
-                index = getLeftOf(index);
+            if(getLeftOf(index)!=0&&getElement(index).compareTo(getElement(getLeftOf(index)))>0){
+                swap(index,getLeftOf(index));
                 flag=true;
+                getLeftOf(index);
             }
         }
+
     }
 
 
@@ -182,21 +183,10 @@ public class MinHeap<E extends Comparable<E>> {
         // TODO: YOUR CODE HERE
         if (contains(element)) {
             int index = 0;
-            index = getIndex(element);
-            contents.remove(index);
-            size -= 1;
-            insert(element);
-//            if (contents.get(index).compareTo(element) < 0) {
-//                int pre = index;
-//                setElement(index,element);
-//                bubbleDown(index);
-//                bubbleDown(pre);
-//            }
-//            if (contents.get(index).compareTo(element) > 0) {
-//                int pre = index;
-//                setElement(index,element);
-//                bubbleUp(index);
-//            }
+            index = getIndex(element);;
+            setElement(index,element);
+            bubbleUp(index);
+            bubbleDown(index);
         } else {
             throw new NoSuchElementException();
         }

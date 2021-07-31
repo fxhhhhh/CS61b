@@ -1,9 +1,4 @@
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.HashSet;
+import java.util.*;
 
 public class Graph implements Iterable<Integer> {
 
@@ -18,6 +13,7 @@ public class Graph implements Iterable<Integer> {
         }
         vertexCount = numVertices;
     }
+
 
     /* Adds a directed Edge (V1, V2) to the graph. That is, adds an edge
        in ONE directions, from v1 to v2. */
@@ -36,6 +32,13 @@ public class Graph implements Iterable<Integer> {
        weight WEIGHT. */
     public void addEdge(int v1, int v2, int weight) {
         // TODO: YOUR CODE HERE
+        Edge a = new Edge(v1, v2, weight);
+        for (int i = 0; i < adjLists[v1].size(); i++) {
+            if (adjLists[v1].get(i).to == v2) {
+                adjLists[v1].remove(i);
+            }
+        }
+        adjLists[v1].add(a);
     }
 
     /* Adds an undirected Edge (V1, V2) to the graph with weight WEIGHT. If the
@@ -43,12 +46,19 @@ public class Graph implements Iterable<Integer> {
        weight WEIGHT. */
     public void addUndirectedEdge(int v1, int v2, int weight) {
         // TODO: YOUR CODE HERE
+        addEdge(v1, v2, weight);
+        addEdge(v2, v1, weight);
     }
 
     /* Returns true if there exists an Edge from vertex FROM to vertex TO.
        Returns false otherwise. */
     public boolean isAdjacent(int from, int to) {
         // TODO: YOUR CODE HERE
+        for (int i = 0; i < adjLists[from].size(); i++) {
+            if (adjLists[from].get(i).to == to) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -56,12 +66,19 @@ public class Graph implements Iterable<Integer> {
        exists in the graph. */
     public List<Integer> neighbors(int v) {
         // TODO: YOUR CODE HERE
-        return null;
+        List<Integer> neighbors = new LinkedList();
+        for (int i = 0; i < adjLists.length; i++) {
+            if (isAdjacent(i, v)) {
+                neighbors.add(i);
+            }
+        }
+        return neighbors;
     }
+
     /* Returns the number of incoming Edges for vertex V. */
     public int inDegree(int v) {
         // TODO: YOUR CODE HERE
-        return 0;
+        return neighbors(v).size();
     }
 
     /* Returns an Iterator that outputs the vertices of the graph in topological
@@ -71,11 +88,11 @@ public class Graph implements Iterable<Integer> {
     }
 
     /**
-     *  A class that iterates through the vertices of this graph,
-     *  starting with a given vertex. Does not necessarily iterate
-     *  through all vertices in the graph: if the iteration starts
-     *  at a vertex v, and there is no path from v to a vertex w,
-     *  then the iteration will not include w.
+     * A class that iterates through the vertices of this graph,
+     * starting with a given vertex. Does not necessarily iterate
+     * through all vertices in the graph: if the iteration starts
+     * at a vertex v, and there is no path from v to a vertex w,
+     * then the iteration will not include w.
      */
     private class DFSIterator implements Iterator<Integer> {
 
@@ -141,7 +158,7 @@ public class Graph implements Iterable<Integer> {
        START and STOP are in this graph. If START == STOP, returns true. */
     public boolean pathExists(int start, int stop) {
         // TODO: YOUR CODE HERE
-        return false;
+        return dfs(start).contains(stop);
     }
 
 
@@ -149,7 +166,24 @@ public class Graph implements Iterable<Integer> {
        List. If START == STOP, returns a List with START. */
     public List<Integer> path(int start, int stop) {
         // TODO: YOUR CODE HERE
-        return null;
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if (pathExists(start, stop)) {
+            if (start == stop) {
+                result.add(stop);
+                return result;
+            }
+            Iterator<Integer> iter = new DFSIterator(start);
+            while (iter.hasNext()) {
+                int curr =iter.next();
+                result.add(curr);
+                if ( curr== stop) {
+                    break;
+                }
+            }
+            return result;
+        } else {
+            return result;
+        }
     }
 
     public List<Integer> topologicalSort() {
@@ -292,8 +326,68 @@ public class Graph implements Iterable<Integer> {
         g1.printPath(1, 4);
         g1.printPath(4, 0);
 
-        Graph g2 = new Graph(5);
-        g2.generateG2();
-        g2.printTopologicalSort();
+//        Graph g2 = new Graph(5);
+//        g2.generateG2();
+//        g2.printTopologicalSort();
     }
+
+    public void traverse() {
+        Stack<Integer> fringe = new Stack();
+        HashSet<Integer> visited = new HashSet();
+        fringe.push(1);
+
+        while (!fringe.isEmpty()) {
+            int v = fringe.pop();
+            if (!visited.contains(v)) {
+                System.out.println(v);
+                visited.add(v);
+                for (int neighbor : neighbors(v)) {
+                    fringe.push(neighbor);
+                }
+            }
+        }
+    }
+//
+//    public static void main(String[] args) {
+//        Graph g1 = new Graph(11);
+//        g1.addUndirectedEdge(1, 3);
+//        g1.addUndirectedEdge(2, 5);
+//        g1.addUndirectedEdge(1, 3);
+//        g1.addUndirectedEdge(3, 4);
+//        g1.addUndirectedEdge(3, 7);
+//        g1.addUndirectedEdge(3, 9);
+//        g1.addUndirectedEdge(3, 6);
+//        g1.addUndirectedEdge(3, 1);
+//        g1.addUndirectedEdge(4, 2);
+//        g1.addUndirectedEdge(4, 8);
+//        g1.addUndirectedEdge(4, 7);
+//        g1.addUndirectedEdge(4, 6);
+//        g1.addUndirectedEdge(4, 9);
+//        g1.addUndirectedEdge(4, 3);
+//        g1.addUndirectedEdge(5, 8);
+//        g1.addUndirectedEdge(5, 7);
+//        g1.addUndirectedEdge(5, 2);
+//        g1.addUndirectedEdge(6, 3);
+//        g1.addUndirectedEdge(6, 4);
+//        g1.addUndirectedEdge(6, 7);
+//        g1.addUndirectedEdge(6, 9);
+//        g1.addUndirectedEdge(7, 4);
+//        g1.addUndirectedEdge(7, 5);
+//        g1.addUndirectedEdge(7, 8);
+//        g1.addUndirectedEdge(7, 10);
+//        g1.addUndirectedEdge(7, 9);
+//        g1.addUndirectedEdge(7, 6);
+//        g1.addUndirectedEdge(7, 3);
+//        g1.addUndirectedEdge(8, 5);
+//        g1.addUndirectedEdge(8, 7);
+//        g1.addUndirectedEdge(8, 4);
+//        g1.addUndirectedEdge(9, 3);
+//        g1.addUndirectedEdge(9, 4);
+//        g1.addUndirectedEdge(9, 7);
+//        g1.addUndirectedEdge(9, 6);
+//        g1.addUndirectedEdge(10, 7);
+//        g1.printDFS(1);
+//        g1.printPath(1, 7);
+//    }
+
 }

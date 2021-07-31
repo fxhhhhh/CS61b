@@ -72,7 +72,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the left child of the element at index INDEX. */
     private int getLeftOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index >= contents.size()-1) {
+        if (2 * index >= contents.size() - 1) {
             return 0;
         } else {
             return 2 * index;
@@ -82,7 +82,7 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
         // TODO: YOUR CODE HERE
-        if (2 * index + 1 >= contents.size()-1) {
+        if (2 * index + 1 >= contents.size() - 1) {
             return 0;
         } else {
             return 2 * index + 1;
@@ -122,6 +122,7 @@ public class MinHeap<E extends Comparable<E>> {
             swap(index, getParentOf(index));
             index = getParentOf(index);
         }
+
     }
 
     /* Bubbles down the element currently at index INDEX. */
@@ -131,7 +132,11 @@ public class MinHeap<E extends Comparable<E>> {
             swap(index, getRightOf(index));
             index = getRightOf(index);
         }
+        while (getLeftOf(index) != 0 && contents.get(index).compareTo(contents.get(getLeftOf(index))) > 0) {
+            swap(index, getLeftOf(index));
+            index = getLeftOf(index);
 
+        }
     }
 
 
@@ -172,23 +177,33 @@ public class MinHeap<E extends Comparable<E>> {
         // TODO: YOUR CODE HERE
         if (contains(element)) {
             int index = 0;
-            for (int i = 1; i < size(); i++) {
-                if (element.equals(contents.get(i))) {
-                    index = i;
-                    break;
-                }
-            }
-            if(contents.get(index).compareTo(element)>0){
-                setElement(index, element);
-                bubbleUp(index);
-            }
-            if(contents.get(index).compareTo(element)<0){
-                setElement(index, element);
+            index = getIndex(element);
+            if (contents.get(index).compareTo(element) < 0) {
+                int pre = index;
+                setElement(index,element);
                 bubbleDown(index);
+                bubbleDown(pre);
+            }
+            if (contents.get(index).compareTo(element) > 0) {
+                int pre = index;
+                setElement(index,element);
+                bubbleUp(index);
+                bubbleDown(pre);
             }
         } else {
             throw new NoSuchElementException();
         }
+    }
+
+    public int getIndex(E element) {
+        int index = 0;
+        for (int i = 1; i < size(); i++) {
+            if (element.equals(contents.get(i))) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
     /* Returns true if ELEMENT is contained in the MinHeap. Item equality should

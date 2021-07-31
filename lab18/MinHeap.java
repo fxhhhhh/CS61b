@@ -188,7 +188,6 @@ public class MinHeap<E extends Comparable<E>> {
                 int pre = index;
                 setElement(index,element);
                 bubbleUp(index);
-                bubbleDown(pre);
             }
         } else {
             throw new NoSuchElementException();

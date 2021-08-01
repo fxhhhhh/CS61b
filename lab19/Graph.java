@@ -68,7 +68,7 @@ public class Graph implements Iterable<Integer> {
         // TODO: YOUR CODE HERE
         List<Integer> neighbors = new LinkedList();
         for (int i = 0; i < adjLists.length; i++) {
-            if (isAdjacent(i, v)) {
+            if (isAdjacent(v, i)) {
                 neighbors.add(i);
             }
         }
@@ -78,7 +78,13 @@ public class Graph implements Iterable<Integer> {
     /* Returns the number of incoming Edges for vertex V. */
     public int inDegree(int v) {
         // TODO: YOUR CODE HERE
-        return neighbors(v).size();
+        List<Integer> neighbors = new LinkedList();
+        for (int i = 0; i < adjLists.length; i++) {
+            if (isAdjacent(v, i)) {
+                neighbors.add(i);
+            }
+        }
+        return neighbors.size();
     }
 
     public List<Integer> outNeighbor(int v) {
@@ -166,19 +172,10 @@ public class Graph implements Iterable<Integer> {
 
     /* Returns true iff there exists a path from START to STOP. Assumes both
        START and STOP are in this graph. If START == STOP, returns true. */
+
     public boolean pathExists(int start, int stop) {
         // TODO: YOUR CODE HERE
-        Map<Integer,Boolean> visitedMap = new HashMap<>();
-        if (start == stop) {
-            return true ;
-        }
-        visitedMap.put(stop, true );
-        for (int neighbor:neighbors(stop)){
-            if (!visitedMap.containsKey(neighbor) && pathExists(start,neighbor)) {
-                return true ;
-            }
-        }
-        return false;
+        return dfs(start).contains(stop);
     }
 
 
@@ -192,12 +189,12 @@ public class Graph implements Iterable<Integer> {
                 result.add(stop);
                 return result;
             }
-            Iterator<Integer> iter = new DFSIterator(stop);
+            Iterator<Integer> iter = new DFSIterator(start);
             Stack<Integer> temp = new Stack<>();
             while (iter.hasNext()) {
                 int curr = iter.next();
                 temp.add(curr);
-                if (curr == start) {
+                if (curr == stop) {
                     break;
                 }
             }
@@ -205,7 +202,7 @@ public class Graph implements Iterable<Integer> {
                 int a = temp.pop();
                 if (!temp.isEmpty()) {
                     int b = temp.pop();
-                    if (isAdjacent(a, b)) {
+                    if (isAdjacent(b, a)) {
                         result.add(a);
                         temp.add(b);
                     } else {
@@ -215,6 +212,7 @@ public class Graph implements Iterable<Integer> {
                     result.add(a);
                 }
             }
+            Collections.reverse(result);
             return result;
         } else {
             return result;
@@ -385,74 +383,24 @@ public class Graph implements Iterable<Integer> {
 
     public static void main(String[] args) {
         Graph g1 = new Graph(5);
-        g1.addEdge(1,2);
-        for (int i =0;i<5;i++) {
-            g1.printDFS(i);
-        }
-        g1.printPath(1,2);
-        g1.printPath(2,1);
+        g1.generateG1();
+        g1.printDFS(0);
+        g1.printDFS(2);
+        g1.printDFS(1);
+        g1.printDFS(3);
+        g1.printDFS(4);
+
+        g1.printPath(0, 3);
+        g1.printPath(0, 4);
+        g1.printPath(1, 3);
+        g1.printPath(1, 4);
+        g1.printPath(4, 0);
 //        Graph g2 = new Graph(5);
 //        g2.generateG2();
 //        g2.printTopologicalSort();
     }
 
-    public void traverse() {
-        Stack<Integer> fringe = new Stack();
-        HashSet<Integer> visited = new HashSet();
-        fringe.push(1);
 
-        while (!fringe.isEmpty()) {
-            int v = fringe.pop();
-            if (!visited.contains(v)) {
-                System.out.println(v);
-                visited.add(v);
-                for (int neighbor : neighbors(v)) {
-                    fringe.push(neighbor);
-                }
-            }
-        }
-    }
-//
-//    public static void main(String[] args) {
-//        Graph g1 = new Graph(11);
-//        g1.addUndirectedEdge(1, 3);
-//        g1.addUndirectedEdge(2, 5);
-//        g1.addUndirectedEdge(1, 3);
-//        g1.addUndirectedEdge(3, 4);
-//        g1.addUndirectedEdge(3, 7);
-//        g1.addUndirectedEdge(3, 9);
-//        g1.addUndirectedEdge(3, 6);
-//        g1.addUndirectedEdge(3, 1);
-//        g1.addUndirectedEdge(4, 2);
-//        g1.addUndirectedEdge(4, 8);
-//        g1.addUndirectedEdge(4, 7);
-//        g1.addUndirectedEdge(4, 6);
-//        g1.addUndirectedEdge(4, 9);
-//        g1.addUndirectedEdge(4, 3);
-//        g1.addUndirectedEdge(5, 8);
-//        g1.addUndirectedEdge(5, 7);
-//        g1.addUndirectedEdge(5, 2);
-//        g1.addUndirectedEdge(6, 3);
-//        g1.addUndirectedEdge(6, 4);
-//        g1.addUndirectedEdge(6, 7);
-//        g1.addUndirectedEdge(6, 9);
-//        g1.addUndirectedEdge(7, 4);
-//        g1.addUndirectedEdge(7, 5);
-//        g1.addUndirectedEdge(7, 8);
-//        g1.addUndirectedEdge(7, 10);
-//        g1.addUndirectedEdge(7, 9);
-//        g1.addUndirectedEdge(7, 6);
-//        g1.addUndirectedEdge(7, 3);
-//        g1.addUndirectedEdge(8, 5);
-//        g1.addUndirectedEdge(8, 7);
-//        g1.addUndirectedEdge(8, 4);
-//        g1.addUndirectedEdge(9, 3);
-//        g1.addUndirectedEdge(9, 4);
-//        g1.addUndirectedEdge(9, 7);
-//        g1.addUndirectedEdge(9, 6);
-//        g1.addUndirectedEdge(10, 7);
-//        g1.printDFS(1);
-//        g1.printPath(1, 7);
-//    }
+
 
 }

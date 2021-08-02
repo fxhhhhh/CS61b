@@ -141,7 +141,7 @@ public class Engine {
     }
 
     public void addWall(TETile[][] tiles, int x, int y) {
-        if (x >= WIDTH || y >= HEIGHT) {
+        if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0) {
             return;
         }
         if (tiles[x][y] == Tileset.NOTHING) {
@@ -150,6 +150,9 @@ public class Engine {
     }
 
     public boolean isWall(TETile[][] tiles, int x, int y) {
+        if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0) {
+            return false;
+        }
         if (tiles[x][y] == Tileset.WALL) {
             return true;
         }

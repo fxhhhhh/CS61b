@@ -13,7 +13,7 @@ public class Engine {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
     public static int SEED;
-    private static final Random RANDOM = new Random(SEED);
+    public static Random RANDOM = new Random(SEED);
     public HashMap<String, TETile[][]> existWorld = new HashMap<>();
 
     /**
@@ -57,13 +57,15 @@ public class Engine {
         TETile[][] finalWorldFrame = null;
         if (existWorld.containsKey(seed)) {
             return existWorld.get(seed);
+        } else {
+            finalWorldFrame = createWorld(seed);
+            existWorld.put(seed, finalWorldFrame);
+            return finalWorldFrame;
         }
-        finalWorldFrame = createWorld(seed);
-        existWorld.put(seed, finalWorldFrame);
-        return finalWorldFrame;
     }
 
     public TETile[][] createWorld(String seed) {
+        RANDOM = new Random(seed.hashCode());
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
@@ -126,8 +128,8 @@ public class Engine {
                     addWall(tiles, x + 1, y + 1);
                     deleteSAND(tiles, x, y);
                 }
-                if (tiles[x][y] != Tileset.NOTHING){
-                    if(x==0||x==WIDTH-1||y==0||y==HEIGHT-1){
+                if (tiles[x][y] != Tileset.NOTHING) {
+                    if (x == 0 || x == WIDTH - 1 || y == 0 || y == HEIGHT - 1) {
                         tiles[x][y] = Tileset.WALL;
                     }
                 }

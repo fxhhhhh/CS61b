@@ -136,7 +136,7 @@ public class Engine {
             }
         }
 
-        ter.renderFrame(tiles);
+//        ter.renderFrame(tiles);
         return tiles;
     }
 

@@ -119,6 +119,18 @@ public class Graph implements Iterable<Integer> {
             if (curr.to == stop) {
                 if (!shortPath.contains(curr.from)) {
                     shortPath.add(curr.from);
+                }else{
+                    for(int i =0;i<shortPath.size();i++){
+                        if(shortPath.get(i)==curr.from){
+                            i=i+1;
+                            while (i<shortPath.size()){
+                                shortPath.remove(i);
+                                i+=1;
+                            }
+                            break;
+                        }
+                    }
+
                 }
                 distance.put(curr.to, curr.weight);
                 visited.add(curr.to);
@@ -127,6 +139,18 @@ public class Graph implements Iterable<Integer> {
             if (!visited.contains(curr.to)) {
                 if (!shortPath.contains(curr.from)) {
                     shortPath.add(curr.from);
+                }else{
+                    for(int i =0;i<shortPath.size();i++){
+                        if(shortPath.get(i)==curr.from){
+                            i=i+1;
+                            while (i<shortPath.size()){
+                                shortPath.remove(i);
+                                i+=1;
+                            }
+                            break;
+                        }
+                    }
+
                 }
                 distance.put(curr.to, curr.weight);
                 visited.add(curr.to);

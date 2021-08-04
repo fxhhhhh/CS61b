@@ -110,6 +110,10 @@ public class Graph implements Iterable<Integer> {
         ArrayList<Integer> shortPath = new ArrayList<>();
         PriorityQueue<Edge> fringe = new PriorityQueue(cmp);
         fringe.add(new Edge(start, start, 0));
+        int[] prev = new int[vertexCount];
+        for (int i =0;i<vertexCount;i++){
+            prev[i]=-1;
+        }
         distance.put(start, 0);
         while (true) {
             if (fringe == null) {
@@ -119,40 +123,18 @@ public class Graph implements Iterable<Integer> {
             if (curr.to == stop) {
                 if (!shortPath.contains(curr.from)) {
                     shortPath.add(curr.from);
-                }else{
-                    for(int i =0;i<shortPath.size();i++){
-                        if(shortPath.get(i)==curr.from){
-                            i=i+1;
-                            while (i<shortPath.size()){
-                                shortPath.remove(i);
-                                i+=1;
-                            }
-                            break;
-                        }
-                    }
-
                 }
                 distance.put(curr.to, curr.weight);
                 visited.add(curr.to);
+                prev[curr.to]=curr.from;
                 break;
             }
             if (!visited.contains(curr.to)) {
                 if (!shortPath.contains(curr.from)) {
                     shortPath.add(curr.from);
-                }else{
-                    for(int i =0;i<shortPath.size();i++){
-                        if(shortPath.get(i)==curr.from){
-                            i=i+1;
-                            while (i<shortPath.size()){
-                                shortPath.remove(i);
-                                i+=1;
-                            }
-                            break;
-                        }
-                    }
-
                 }
                 distance.put(curr.to, curr.weight);
+                prev[curr.to]=curr.from;
                 visited.add(curr.to);
                 for (int i : neighbors(curr.to)) {
                     if (!visited.contains(i)) {
@@ -163,8 +145,16 @@ public class Graph implements Iterable<Integer> {
             }
         }
         shortPath.add(stop);
-
-        return shortPath;
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(stop);
+        int temp =stop;
+        while (prev[temp]!=start){
+            result.add(prev[temp]);
+            temp=prev[temp];
+        }
+        result.add(start);
+        Collections.reverse(result);
+            return result;
 
 
     }

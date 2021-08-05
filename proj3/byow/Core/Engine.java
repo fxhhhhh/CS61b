@@ -66,7 +66,7 @@ public class Engine {
 
     public TETile[][] createWorld(String seed) {
         RANDOM = new Random(seed.hashCode());
-//        ter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT);
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -128,6 +128,11 @@ public class Engine {
                     addWall(tiles, x + 1, y + 1);
                     deleteSAND(tiles, x, y);
                 }
+
+            }
+        }
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
                 if (tiles[x][y] != Tileset.NOTHING) {
                     if (x == 0 || x == WIDTH - 1 || y == 0 || y == HEIGHT - 1) {
                         tiles[x][y] = Tileset.WALL;
@@ -136,7 +141,8 @@ public class Engine {
             }
         }
 
-//        ter.renderFrame(tiles);
+
+        ter.renderFrame(tiles);
         return tiles;
     }
 
@@ -161,7 +167,13 @@ public class Engine {
 
     public void deleteSAND(TETile[][] tiles, int x, int y) {
         if (isWall(tiles, x, y - 1) && isWall(tiles, x, y + 1) && isWall(tiles, x - 1, y) && isWall(tiles, x + 1, y)) {
-            tiles[x][y] = Tileset.WALL;
+            tiles[x][y] = Tileset.NOTHING;
+        }
+    }
+
+    public void deleteWall(TETile[][] tiles, int x, int y) {
+        if (isWall(tiles, x, y - 1) && isWall(tiles, x, y + 1) && isWall(tiles, x - 1, y) && isWall(tiles, x + 1, y)) {
+            tiles[x][y] = Tileset.NOTHING;
         }
     }
 
@@ -171,18 +183,16 @@ public class Engine {
      * @param TETile
      */
     public static void fillWithPlus(TETile[][] TETile, int size, int a, int b) {
-        int height = TETile[0].length;
-        int width = TETile.length;
-        for (int i = -1; i < 3 * size + 1; i++) {
-            for (int j = size - 1; j < 2 * size + 1; j++) {
+        for (int i = 0; i < 3 * size ; i++) {
+            for (int j = size ; j < 2 * size ; j++) {
                 if (a + i > WIDTH || b + j > HEIGHT || b + j < 0 || a + i < 0 || TETile[a + i][b + j] == Tileset.SAND) {
                     continue;
                 } else {
-                    if (j == size - 1 || j == 2 * size || i == -1 || i == 3 * size) {
-                        TETile[a + i][b + j] = Tileset.WALL;
-                    } else {
+//                    if (j == size - 1 || j == 2 * size || i == -1 || i == 3 * size) {
+//                        TETile[a + i][b + j] = Tileset.WALL;
+//                    } else {
                         TETile[a + i][b + j] = Tileset.SAND;
-                    }
+//                    }
                 }
             }
         }
@@ -196,30 +206,30 @@ public class Engine {
                 }
             }
         }
-        for (int j = -1; j < size; j++) {
-            if (b + j > HEIGHT || b + j < 0 || TETile[a + size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
-                continue;
-            } else {
-                TETile[a + size - 1][b + j] = Tileset.WALL;
-                TETile[a + 2 * size][b + j] = Tileset.WALL;
-            }
-        }
-        for (int j = 2 * size; j < 3 * size + 1; j++) {
-            if (TETile[size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
-                continue;
-            } else {
-                TETile[a + size - 1][b + j] = Tileset.WALL;
-                TETile[a + 2 * size][b + j] = Tileset.WALL;
-            }
-        }
-        for (int i = size; i < 2 * size; i++) {
-            if (TETile[a + i][b - 1] == Tileset.SAND || TETile[a + i][b + 3 * size] == Tileset.SAND) {
-                continue;
-            } else {
-                TETile[a + i][b - 1] = Tileset.WALL;
-                TETile[a + i][b + 3 * size] = Tileset.WALL;
-            }
-        }
+//        for (int j = -1; j < size; j++) {
+//            if (b + j > HEIGHT || b + j < 0 || TETile[a + size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
+//                continue;
+//            } else {
+//                TETile[a + size - 1][b + j] = Tileset.WALL;
+//                TETile[a + 2 * size][b + j] = Tileset.WALL;
+//            }
+//        }
+//        for (int j = 2 * size; j < 3 * size + 1; j++) {
+//            if (TETile[size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
+//                continue;
+//            } else {
+//                TETile[a + size - 1][b + j] = Tileset.WALL;
+//                TETile[a + 2 * size][b + j] = Tileset.WALL;
+//            }
+//        }
+//        for (int i = size; i < 2 * size; i++) {
+//            if (TETile[a + i][b - 1] == Tileset.SAND || TETile[a + i][b + 3 * size] == Tileset.SAND) {
+//                continue;
+//            } else {
+//                TETile[a + i][b - 1] = Tileset.WALL;
+//                TETile[a + i][b + 3 * size] = Tileset.WALL;
+//            }
+//        }
 
 
     }

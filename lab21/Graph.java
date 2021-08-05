@@ -134,14 +134,21 @@ public class Graph {
     public Graph prims(int start) {
         // TODO: YOUR CODE HERE
         Graph MST = new Graph();
-        ArrayList<Integer> vertex = new ArrayList<>();
+        HashSet<Integer> vertex = new HashSet<>();
         PriorityQueue<Edge> fringe = new PriorityQueue(cmp);
         fringe.add(new Edge(start, start, 0));
         while (vertex.size() != getAllVertices().size()) {
+            if(fringe==null){
+                if(!vertex.contains(getAllVertices().pollFirst())){
+                    fringe.add(new Edge(getAllVertices().pollFirst(),getAllVertices().pollFirst(),0));
+                }
+            }
             Edge temp = fringe.poll();
             if (!vertex.contains(temp.getDest())) {
                 vertex.add(temp.getDest());
-                MST.addEdge(temp);
+                if(temp.getDest()!=temp.getSource()){
+                    MST.addEdge(temp);
+                }
                 for (Edge j : edges.get(temp.getDest())) {
                     fringe.add(j);
                 }
@@ -224,7 +231,10 @@ public class Graph {
             MST.addVertex(vertex.pollFirst());
         }
         TreeSet<Edge> edges=getAllEdges();
-        while (!spans(MST)){
+        while (MST.getAllEdges().size()!=MST.getAllVertices().size()-1){
+            if(edges==null){
+                break;
+            }
             Edge temp =edges.pollFirst();
             if(!MST.isConnected(temp.getSource(),temp.getDest())){
                 MST.addEdge(temp);
@@ -276,4 +286,22 @@ public class Graph {
         }
     }
 
+//    public static void main(String[] args) {
+//        Graph a = new Graph();
+//        a.addEdge(0,1,4);
+//        a.addEdge(0,2,1);
+//        a.addEdge(1,2,7);
+//        a.addEdge(2,3,5);
+//        a.addEdge(3,4,6);
+//        a.addEdge(2,4,0);
+//        a.addEdge(2,5,3);
+//        a.addEdge(4,5,2);
+//        Graph b =a.kruskals();
+//        if(a.spans(b)){
+//            System.out.println(1);
+//        }
+//        else {
+//            System.out.println(2);
+//        }
+//    }
 }

@@ -1,15 +1,9 @@
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.HashSet;
-import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.io.BufferedReader;
-import java.nio.charset.Charset;
-import java.io.IOException;
-import java.util.Random;
-import java.util.Queue;
-import java.util.ArrayDeque;
+import java.util.*;
 
 /* A mutable and finite Graph object. Edge labels are stored via a HashMap
    where labels are mapped to a key calculated by the following. The graph is
@@ -23,6 +17,14 @@ public class Graph {
     private HashMap<Integer, Set<Edge>> edges = new HashMap<>();
     /* A sorted set of all edges. */
     private TreeSet<Edge> allEdges = new TreeSet<>();
+
+    private Comparator<Edge> cmp = new Comparator<Edge>() {
+
+        @Override
+        public int compare(Edge a1, Edge a2) {
+            return a1.getWeight() - a2.getWeight();
+        }
+    };
 
     /* Returns the vertices that neighbor V. */
     public TreeSet<Integer> getNeighbors(int v) {
@@ -131,12 +133,104 @@ public class Graph {
 
     public Graph prims(int start) {
         // TODO: YOUR CODE HERE
-        return null;
+        Graph MST = new Graph();
+        ArrayList<Integer> vertex = new ArrayList<>();
+        PriorityQueue<Edge> fringe = new PriorityQueue(cmp);
+        fringe.add(new Edge(start, start, 0));
+        while (vertex.size() != getAllVertices().size()) {
+            Edge temp = fringe.poll();
+            if (!vertex.contains(temp.getDest())) {
+                vertex.add(temp.getDest());
+                MST.addEdge(temp);
+                for (Edge j : edges.get(temp.getDest())) {
+                    fringe.add(j);
+                }
+            }
+        }
+
+        return MST;
+    }
+    private class DFSIterator implements Iterator<Integer> {
+
+        private Stack<Integer> fringe;
+        private HashSet<Integer> visited;
+
+        public DFSIterator(Integer start) {
+            fringe = new Stack<>();
+            visited = new HashSet<>();
+            fringe.push(start);
+        }
+
+        public boolean hasNext() {
+            if (!fringe.isEmpty()) {
+                int i = fringe.pop();
+                while (visited.contains(i)) {
+                    if (fringe.isEmpty()) {
+                        return false;
+                    }
+                    i = fringe.pop();
+                }
+                fringe.push(i);
+                return true;
+            }
+            return false;
+        }
+
+        public Integer next() {
+            int curr = fringe.pop();
+            ArrayList<Integer> lst = new ArrayList<>();
+            for (int i : getNeighbors(curr)) {
+                lst.add(i);
+            }
+            lst.sort((Integer i1, Integer i2) -> -(i1 - i2));
+            for (Integer e : lst) {
+                fringe.push(e);
+            }
+            visited.add(curr);
+            return curr;
+        }
+
+        //ignore this method
+        public void remove() {
+            throw new UnsupportedOperationException(
+                    "vertex removal not implemented");
+        }
+
+    }
+
+    /* Returns the collected result of performing a depth-first search on this
+       graph's vertices starting from V. */
+    public List<Integer> dfs(int v) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        Iterator<Integer> iter = new DFSIterator(v);
+
+        while (iter.hasNext()) {
+            result.add(iter.next());
+        }
+        return result;
+    }
+    public boolean isConnected(int v1,int v2){
+        if(dfs(v1).contains(v2)){
+            return true;
+        }
+        return false;
     }
 
     public Graph kruskals() {
         // TODO: YOUR CODE HERE
-        return null;
+        Graph MST = new Graph();
+        TreeSet<Integer> vertex = getAllVertices();
+        while (vertex.size()!=0){
+            MST.addVertex(vertex.pollFirst());
+        }
+        TreeSet<Edge> edges=getAllEdges();
+        while (!spans(MST)){
+            Edge temp =edges.pollFirst();
+            if(!MST.isConnected(temp.getSource(),temp.getDest())){
+                MST.addEdge(temp);
+            }
+        }
+        return MST;
     }
 
     /* Returns a randomly generated graph with VERTICES number of vertices and
@@ -181,4 +275,5 @@ public class Graph {
             return null;
         }
     }
+
 }

@@ -4,6 +4,7 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -67,57 +68,49 @@ public class Engine {
     public TETile[][] createWorld(String seed) {
         RANDOM = new Random(seed.hashCode());
         ter.initialize(WIDTH, HEIGHT);
+        ArrayList<Room> rooms = new ArrayList<>();
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 tiles[x][y] = Tileset.NOTHING;
             }
         }
-        int c = 0;
-        int d = 0;
-        int times = 0;
-        while (times < 5) {
-            times = RANDOM.nextInt(7);
+        int mainRoomX = WIDTH / 2;
+        int mainRoomY = HEIGHT / 2;
+        Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
+        int roomCount = RANDOM.nextInt(30);
+        while (roomCount < 25) {
+            roomCount = RANDOM.nextInt(30);
         }
-        for (int k = 2; k < 3 * times; k++) {
-            int i = k % 2;
-            int a = RANDOM.nextInt(WIDTH - 3 * i);
-            int b = RANDOM.nextInt(HEIGHT - 3 * i);
-            if (i < 3) {
-                fillWithSquare(tiles, RANDOM.nextInt(3), a, b);
-                if (c != 0 && d != 0) {
-                    for (int j = 0; j < Math.abs(a - c) + i; j++) {
-                        tiles[Math.min(a, c) + j][Math.min(b, d)] = Tileset.SAND;
-                    }
-                    for (int j = 0; j < Math.abs(b - d) + i - 1; j++) {
-                        tiles[Math.min(a, c) + Math.abs(a - c) + i - 1][Math.min(b, d) + j] = Tileset.SAND;
-                        tiles[Math.min(a, c)][Math.min(b, d) + j] = Tileset.SAND;
-                    }
-                }
-                c = a;
-                d = b;
-            } else {
-                fillWithPlus(tiles, i, a, b);
-                if (c != 0 && d != 0) {
-                    a = a + i;
-                    for (int j = 0; j < Math.abs(a - c) + i; j++) {
-                        tiles[Math.min(a, c) + j][Math.min(b, d)] = Tileset.SAND;
-                    }
-                    for (int j = 0; j < Math.abs(b - d) + i - 1; j++) {
-                        tiles[Math.min(a, c) + Math.abs(a - c) + i - 1][Math.min(b, d) + j] = Tileset.SAND;
-                        tiles[Math.min(a, c)][Math.min(b, d) + j] = Tileset.SAND;
-                    }
-                    c = a;
-                    d = b;
-                } else {
-                    c = a + i;
-                    d = b;
+        System.out.println("roomCount" + roomCount);
+        for (int i = 0; i < roomCount; i++) {
+            int roomSize = RANDOM.nextInt(7);
+            if (roomSize < 3) {
+                roomSize = RANDOM.nextInt(7);
+            }
+            System.out.println("roomSize" + roomSize);
+            int a = RANDOM.nextInt(WIDTH);
+            int b = RANDOM.nextInt(HEIGHT);
+            System.out.println(a + "," + b);
+            if (isInScope(a, b)) {
+                Room temp = new Room(tiles, a, b, roomSize);
+                if (roomSize != 0) {
+                    addRoad(tiles, temp, mainRoom);
+                    rooms.add(temp);
                 }
             }
         }
+        addWalls(tiles);
+        mainRoom.changeElement(tiles, Tileset.FLOWER);
+        addGrass(tiles);
+        ter.renderFrame(tiles);
+        return tiles;
+    }
+
+    public void addWalls(TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
-                if (tiles[x][y] == Tileset.SAND) {
+                if (tiles[x][y] == Tileset.SAND || tiles[x][y] == Tileset.FLOOR) {
                     addWall(tiles, x, y + 1);
                     addWall(tiles, x, y - 1);
                     addWall(tiles, x - 1, y);
@@ -126,13 +119,7 @@ public class Engine {
                     addWall(tiles, x - 1, y + 1);
                     addWall(tiles, x + 1, y - 1);
                     addWall(tiles, x + 1, y + 1);
-                    deleteSAND(tiles, x, y);
                 }
-
-            }
-        }
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
                 if (tiles[x][y] != Tileset.NOTHING) {
                     if (x == 0 || x == WIDTH - 1 || y == 0 || y == HEIGHT - 1) {
                         tiles[x][y] = Tileset.WALL;
@@ -140,10 +127,6 @@ public class Engine {
                 }
             }
         }
-
-
-        ter.renderFrame(tiles);
-        return tiles;
     }
 
     public void addWall(TETile[][] tiles, int x, int y) {
@@ -155,95 +138,104 @@ public class Engine {
         }
     }
 
-    public boolean isWall(TETile[][] tiles, int x, int y) {
-        if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0) {
-            return false;
+    public void addGrass(TETile[][] tiles) {
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                if (tiles[x][y] == Tileset.NOTHING) {
+                    tiles[x][y] = Tileset.GRASS;
+                }
+            }
         }
-        if (tiles[x][y] == Tileset.WALL) {
+    }
+
+    public void addRoad(TETile[][] tiles, Room a, Room main) {
+        if (Math.min(a.x, main.x) == a.x) {
+            if (Math.min(a.y, main.y) == a.y) {
+                for (int x = a.x + a.size; x < main.x + RANDOM.nextInt(2); x += 1) {
+                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.SAND) {
+                        tiles[x][a.y] = Tileset.SAND;
+                    }
+                }
+                for (int y = a.y; y < main.y; y += 1) {
+                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.SAND) {
+                        tiles[main.x][y] = Tileset.SAND;
+                    }
+                }
+            } else {
+                for (int x = a.x + a.size; x < main.x; x += 1) {
+                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.SAND) {
+                        tiles[x][a.y] = Tileset.SAND;
+                    }
+                }
+                for (int y = a.y; y > main.y; y -= 1) {
+                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.SAND) {
+                        tiles[main.x][y] = Tileset.SAND;
+                    }
+                }
+            }
+        } else {
+            if (Math.min(a.y, main.y) == a.y) {
+                for (int x = main.x + main.size; x < a.x; x += 1) {
+                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.SAND) {
+                        tiles[x][main.y] = Tileset.SAND;
+                    }
+                }
+                for (int y = main.y; y > a.y + a.size - 1; y -= 1) {
+                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.SAND) {
+                        tiles[a.x][y] = Tileset.SAND;
+                    }
+                }
+            } else {
+                for (int x = main.x + main.size; x < a.x; x += 1) {
+                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.SAND) {
+                        tiles[x][main.y] = Tileset.SAND;
+                    }
+                }
+                for (int y = main.y; y < a.y; y += 1) {
+                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.SAND) {
+                        tiles[a.x][y] = Tileset.SAND;
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isInScope(int x, int y) {
+        if (x < WIDTH && y < HEIGHT && y > 0 && y > 0) {
             return true;
         }
         return false;
     }
 
-    public void deleteSAND(TETile[][] tiles, int x, int y) {
-        if (isWall(tiles, x, y - 1) && isWall(tiles, x, y + 1) && isWall(tiles, x - 1, y) && isWall(tiles, x + 1, y)) {
-            tiles[x][y] = Tileset.NOTHING;
-        }
-    }
+    private class Room {
+        private int size;
+        private int x;
+        private int y;
 
-    public void deleteWall(TETile[][] tiles, int x, int y) {
-        if (isWall(tiles, x, y - 1) && isWall(tiles, x, y + 1) && isWall(tiles, x - 1, y) && isWall(tiles, x + 1, y)) {
-            tiles[x][y] = Tileset.NOTHING;
-        }
-    }
-
-    /**
-     * Fills the given 2D array of tiles with RANDOM tiles.
-     *
-     * @param TETile
-     */
-    public static void fillWithPlus(TETile[][] TETile, int size, int a, int b) {
-        for (int i = 0; i < 3 * size ; i++) {
-            for (int j = size ; j < 2 * size ; j++) {
-                if (a + i > WIDTH || b + j > HEIGHT || b + j < 0 || a + i < 0 || TETile[a + i][b + j] == Tileset.SAND) {
-                    continue;
-                } else {
-//                    if (j == size - 1 || j == 2 * size || i == -1 || i == 3 * size) {
-//                        TETile[a + i][b + j] = Tileset.WALL;
-//                    } else {
-                        TETile[a + i][b + j] = Tileset.SAND;
-//                    }
+        Room(TETile[][] tiles, int a, int b, int c) {
+            x = a;
+            y = b;
+            size = c;
+            for (int i = 0; i < size; i += 1) {
+                for (int j = 0; j < size; j += 1) {
+                    if (a + i < WIDTH && b + j < HEIGHT && b + j > 0 && a + i > 0) {
+                        tiles[i + a][j + b] = Tileset.FLOOR;
+                    }
                 }
             }
         }
 
-        for (int i = size; i < 2 * size; i++) {
-            for (int j = 0; j < 3 * size; j++) {
-                if (a + i > WIDTH || b + j > HEIGHT || b + j < 0 || a + i < 0 || TETile[a + i][b + j] == Tileset.SAND) {
-                    continue;
-                } else {
-                    TETile[a + i][b + j] = Tileset.SAND;
-                }
-            }
-        }
-//        for (int j = -1; j < size; j++) {
-//            if (b + j > HEIGHT || b + j < 0 || TETile[a + size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
-//                continue;
-//            } else {
-//                TETile[a + size - 1][b + j] = Tileset.WALL;
-//                TETile[a + 2 * size][b + j] = Tileset.WALL;
-//            }
-//        }
-//        for (int j = 2 * size; j < 3 * size + 1; j++) {
-//            if (TETile[size - 1][b + j] == Tileset.SAND || TETile[a + 2 * size][b + j] == Tileset.SAND) {
-//                continue;
-//            } else {
-//                TETile[a + size - 1][b + j] = Tileset.WALL;
-//                TETile[a + 2 * size][b + j] = Tileset.WALL;
-//            }
-//        }
-//        for (int i = size; i < 2 * size; i++) {
-//            if (TETile[a + i][b - 1] == Tileset.SAND || TETile[a + i][b + 3 * size] == Tileset.SAND) {
-//                continue;
-//            } else {
-//                TETile[a + i][b - 1] = Tileset.WALL;
-//                TETile[a + i][b + 3 * size] = Tileset.WALL;
-//            }
-//        }
-
-
-    }
-
-    public static void fillWithSquare(TETile[][] TETile, int size, int a, int b) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (i + a >= WIDTH || j + b >= HEIGHT || i + a < 0 || j + b < 0) {
-                    continue;
-                } else {
-                    TETile[a + i][b + j] = Tileset.SAND;
+        public void changeElement(TETile[][] tiles, TETile a) {
+            for (int i = 0; i < size; i += 1) {
+                for (int j = 0; j < size; j += 1) {
+                    if (x + i < WIDTH && y + j < HEIGHT && y + j > 0 && x + i > 0) {
+                        tiles[x + i][j + y] = a;
+                    }
                 }
             }
         }
     }
+
+
 }
 

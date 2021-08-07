@@ -78,6 +78,7 @@ public class Engine {
         int mainRoomX = WIDTH / 2;
         int mainRoomY = HEIGHT / 2;
         Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
+        tiles[mainRoomX+1][mainRoomY+1]=Tileset.AVATAR;
         int roomCount = RANDOM.nextInt(30);
         while (roomCount < 25) {
             roomCount = RANDOM.nextInt(30);

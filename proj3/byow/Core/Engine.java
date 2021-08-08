@@ -79,7 +79,7 @@ public class Engine {
 
 
     public TETile[][] createWorld(String seed, String movement) {
-        while (true) {
+//        while (true) {
             RANDOM = new Random(seed.hashCode());
             ter.initialize(WIDTH, HEIGHT + 2);
             ArrayList<Room> rooms = new ArrayList();
@@ -125,14 +125,15 @@ public class Engine {
 
             addGrass(tiles);
             ter.renderFrame(tiles);
-            createWindows(tiles);
-            double mouseX = StdDraw.mouseX();
-            double mouseY = StdDraw.mouseY();
-            StdDraw.clear(Color.BLACK);
-            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
-                StdDraw.pause(500);
-            }
-        }
+//            createWindows(tiles);
+//            double mouseX = StdDraw.mouseX();
+//            double mouseY = StdDraw.mouseY();
+//            StdDraw.clear(Color.BLACK);
+//            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
+//                StdDraw.pause(500);
+//            }
+//        }
+        return tiles;
     }
 
     public void move(TETile[][] tiles, String movement) {

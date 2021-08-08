@@ -99,7 +99,7 @@ public class Engine {
     public TETile[][] createWorld(String seed, String movement) {
 //        while (true) {
         RANDOM = new Random(seed.hashCode());
-        ter.initialize(WIDTH, HEIGHT + 2);
+//        ter.initialize(WIDTH, HEIGHT + 2);
         ArrayList<Room> rooms = new ArrayList();
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
@@ -137,12 +137,11 @@ public class Engine {
         addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
 
-        System.out.println(movement.toString());
         move(tiles, movement, seed);
 
 
 //        addGrass(tiles);
-        ter.renderFrame(tiles);
+//        ter.renderFrame(tiles);
 //            createWindows(tiles);
 //            double mouseX = StdDraw.mouseX();
 //            double mouseY = StdDraw.mouseY();

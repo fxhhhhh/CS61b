@@ -378,7 +378,7 @@ public class Engine {
     }
 
     public boolean isInScope(int x, int y) {
-        if (x < WIDTH && y < HEIGHT && y > 0 && y > 0) {
+        if (x < WIDTH && y < HEIGHT && x > 0 && y > 0) {
             return true;
         }
         return false;

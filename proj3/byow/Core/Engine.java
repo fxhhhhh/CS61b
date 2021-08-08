@@ -6,6 +6,10 @@ import byow.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -58,73 +62,87 @@ public class Engine {
         // that works for many different input types.
         String seed = null;
         int stop = 0;
-        for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) == 'S') {
-                stop = i;
-                System.out.println(stop);
-            }
-        }
-        seed = input.substring(1, stop);
-        String movement = input.substring(stop + 1, input.length());
+        boolean flagNew = false;
         TETile[][] finalWorldFrame = null;
-        if (existWorld.containsKey(seed)) {
-            existWorld.put(seed, existWorld.get(seed) + movement);
-            finalWorldFrame = createWorld(seed, movement + existWorld.get(seed));
-        } else {
-            existWorld.put(seed, movement);
-            finalWorldFrame = createWorld(seed, movement);
+        if (input.charAt(0) == 'N') {
+            flagNew = true;
         }
-        return finalWorldFrame;
+        if (flagNew) {
+            for (int i = 0; i < input.length(); i++) {
+                if (input.charAt(i) == 'S') {
+                    stop = i;
+                }
+            }
+            seed = input.substring(1, stop);
+            String movement = input.substring(stop + 1, input.length());
+            System.out.println(movement);
+            finalWorldFrame = createWorld(seed, movement);
+            return finalWorldFrame;
+        } else {
+            Charset cs = Charset.forName("US-ASCII");
+            BufferedReader r = null;
+            try {
+                String movement=input.substring( 1, input.length());
+                r = Files.newBufferedReader(Paths.get("saving.txt"), cs);
+                String addedMove;
+                seed = r.readLine();
+                addedMove = r.readLine();
+                finalWorldFrame = createWorld(seed, movement + addedMove);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return finalWorldFrame;
+        }
     }
 
 
     public TETile[][] createWorld(String seed, String movement) {
 //        while (true) {
-            RANDOM = new Random(seed.hashCode());
-            ter.initialize(WIDTH, HEIGHT + 2);
-            ArrayList<Room> rooms = new ArrayList();
-            TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-            for (int x = 0; x < WIDTH; x += 1) {
-                for (int y = 0; y < HEIGHT; y += 1) {
-                    tiles[x][y] = Tileset.NOTHING;
-                }
+        RANDOM = new Random(seed.hashCode());
+        ter.initialize(WIDTH, HEIGHT + 2);
+        ArrayList<Room> rooms = new ArrayList();
+        TETile[][] tiles = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
             }
-            int mainRoomX = WIDTH / 2;
-            int mainRoomY = HEIGHT / 2;
-            Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
-            tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
-            int roomCount = RANDOM.nextInt(30);
-            while (roomCount < 25) {
-                roomCount = RANDOM.nextInt(30);
-            }
+        }
+        int mainRoomX = WIDTH / 2;
+        int mainRoomY = HEIGHT / 2;
+        Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
+        tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
+        int roomCount = RANDOM.nextInt(30);
+        while (roomCount < 25) {
+            roomCount = RANDOM.nextInt(30);
+        }
 
-            System.out.println("roomCount" + roomCount);
-            for (int i = 0; i < roomCount; i++) {
-                int roomSize = RANDOM.nextInt(7);
-                if (roomSize < 3) {
-                    roomSize = RANDOM.nextInt(7);
-                }
-                System.out.println("roomSize" + roomSize);
-                int a = RANDOM.nextInt(WIDTH);
-                int b = RANDOM.nextInt(HEIGHT);
-                System.out.println(a + "," + b);
+        System.out.println("roomCount" + roomCount);
+        for (int i = 0; i < roomCount; i++) {
+            int roomSize = RANDOM.nextInt(7);
+            if (roomSize < 3) {
+                roomSize = RANDOM.nextInt(7);
+            }
+            System.out.println("roomSize" + roomSize);
+            int a = RANDOM.nextInt(WIDTH);
+            int b = RANDOM.nextInt(HEIGHT);
+            System.out.println(a + "," + b);
 
-                if (isInScope(a, b)) {
-                    Room temp = new Room(tiles, a, b, roomSize);
-                    if (roomSize != 0) {
-                        addRoad(tiles, temp, mainRoom);
-                        rooms.add(temp);
-                    }
+            if (isInScope(a, b)) {
+                Room temp = new Room(tiles, a, b, roomSize);
+                if (roomSize != 0) {
+                    addRoad(tiles, temp, mainRoom);
+                    rooms.add(temp);
                 }
             }
-            addWalls(tiles);
+        }
+        addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
 
-            move(tiles, movement);
+        move(tiles, movement, seed);
 
 
-            addGrass(tiles);
-            ter.renderFrame(tiles);
+        addGrass(tiles);
+        ter.renderFrame(tiles);
 //            createWindows(tiles);
 //            double mouseX = StdDraw.mouseX();
 //            double mouseY = StdDraw.mouseY();
@@ -136,18 +154,41 @@ public class Engine {
         return tiles;
     }
 
-    public void move(TETile[][] tiles, String movement) {
+    public void move(TETile[][] tiles, String movement, String seed) {
         boolean existQFlag = false;
+        String temp = "";
         for (int i = 0; i < movement.length(); i++) {
             if (movement.charAt(i) != ':') {
+                temp += movement.charAt(i);
                 walk(tiles, movement.charAt(i));
             } else {
                 existQFlag = true;
                 break;
             }
         }
-        
+        if (existQFlag) {
+            File file = new File("saving.txt");
 
+            System.out.println(111);
+            try {
+                BufferedWriter output = new BufferedWriter(new FileWriter(file));
+                output.write(seed + "\n");
+                output.write(temp);
+                output.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                BufferedWriter output = new BufferedWriter(new FileWriter(file));
+                output.write(seed + "\n");
+                output.write(temp);
+                output.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
     }
 

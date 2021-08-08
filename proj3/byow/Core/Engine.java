@@ -75,7 +75,6 @@ public class Engine {
             }
             seed = input.substring(1, stop);
             String movement = input.substring(stop + 1, input.length());
-            System.out.println(movement);
             finalWorldFrame = createWorld(seed, movement);
             return finalWorldFrame;
         } else {
@@ -116,16 +115,15 @@ public class Engine {
             roomCount = RANDOM.nextInt(30);
         }
 
-        System.out.println("roomCount" + roomCount);
         for (int i = 0; i < roomCount; i++) {
             int roomSize = RANDOM.nextInt(7);
             if (roomSize < 3) {
                 roomSize = RANDOM.nextInt(7);
             }
-            System.out.println("roomSize" + roomSize);
+
             int a = RANDOM.nextInt(WIDTH);
             int b = RANDOM.nextInt(HEIGHT);
-            System.out.println(a + "," + b);
+
 
             if (isInScope(a, b)) {
                 Room temp = new Room(tiles, a, b, roomSize);
@@ -151,10 +149,7 @@ public class Engine {
 //                StdDraw.pause(500);
 //            }
 //        }
-        if(tiles==null){
-            System.out.println(1234);
-        }
-        System.out.println(tiles.toString());
+
         return tiles;
     }
 

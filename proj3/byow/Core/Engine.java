@@ -71,6 +71,7 @@ public class Engine {
             for (int i = 0; i < input.length(); i++) {
                 if (input.charAt(i) == 's') {
                     stop = i;
+                    break;
                 }
             }
             seed = input.substring(1, stop);
@@ -81,12 +82,12 @@ public class Engine {
             Charset cs = Charset.forName("US-ASCII");
             BufferedReader r = null;
             try {
-                String movement=input.substring( 1, input.length());
+                String movement = input.substring(1, input.length());
                 r = Files.newBufferedReader(Paths.get("saving.txt"), cs);
                 String addedMove;
                 seed = r.readLine();
                 addedMove = r.readLine();
-                finalWorldFrame = createWorld(seed, movement + addedMove);
+                finalWorldFrame = createWorld(seed,  addedMove+movement);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -98,7 +99,7 @@ public class Engine {
     public TETile[][] createWorld(String seed, String movement) {
 //        while (true) {
         RANDOM = new Random(seed.hashCode());
-//        ter.initialize(WIDTH, HEIGHT + 2);
+        ter.initialize(WIDTH, HEIGHT + 2);
         ArrayList<Room> rooms = new ArrayList();
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
@@ -136,11 +137,12 @@ public class Engine {
         addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
 
+        System.out.println(movement.toString());
         move(tiles, movement, seed);
 
 
 //        addGrass(tiles);
-//        ter.renderFrame(tiles);
+        ter.renderFrame(tiles);
 //            createWindows(tiles);
 //            double mouseX = StdDraw.mouseX();
 //            double mouseY = StdDraw.mouseY();
@@ -203,31 +205,44 @@ public class Engine {
             }
         }
 
-        if (a == 'D') {
+        if (a == 'd') {
             tiles[peopleX][peopleY] = Tileset.FLOOR;
             peopleX += 1;
-            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+            if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            } else {
+                peopleX -= 1;
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 'W') {
+        if (a == 'w') {
             tiles[peopleX][peopleY] = Tileset.FLOOR;
             peopleY += 1;
-            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+
+            if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            } else {
+                peopleY -= 1;
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 'S') {
+        if (a == 's') {
             tiles[peopleX][peopleY] = Tileset.FLOOR;
             peopleY -= 1;
-            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+            if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            } else {
+                peopleY += 1;
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 'A') {
+        if (a == 'a') {
             tiles[peopleX][peopleY] = Tileset.FLOOR;
             peopleX -= 1;
-            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+            if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            } else {
+                peopleX += 1;
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }

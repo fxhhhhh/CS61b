@@ -120,8 +120,7 @@ public class Engine {
             addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
 
-            move(tiles,movement);
-
+            move(tiles, movement);
 
 
             addGrass(tiles);
@@ -137,25 +136,58 @@ public class Engine {
     }
 
     public void move(TETile[][] tiles, String movement) {
-        boolean existQFlag=false;
-        for(int i =0;i<movement.length();i++){
-            if(movement.charAt(i)!=':'){
-                walk(tiles,movement.charAt(i));
-            }else {
-                existQFlag
+        boolean existQFlag = false;
+        for (int i = 0; i < movement.length(); i++) {
+            if (movement.charAt(i) != ':') {
+                walk(tiles, movement.charAt(i));
+            } else {
+                existQFlag = true;
+                break;
+            }
+        }
+        
+
+
+    }
+
+    public void walk(TETile[][] tiles, Character a) {
+        int peopleX = 0;
+        int peopleY = 0;
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                if (tiles[x][y] == Tileset.AVATAR) {
+                    peopleX = x;
+                    peopleY = y;
+                }
             }
         }
 
-    }
-    public void walk(TETile[][] tiles,Character a){
-        int peopleX=0;
-        int peopleY=0;
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                if(tiles[x][y] == Tileset.AVATAR){
-                    peopleX=x;
-                    peopleY=y;
-                }
+        if (a == 'D') {
+            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            peopleX += 1;
+            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            }
+        }
+        if (a == 'W') {
+            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            peopleY += 1;
+            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            }
+        }
+        if (a == 'S') {
+            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            peopleY -= 1;
+            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
+            }
+        }
+        if (a == 'A') {
+            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            peopleX -= 1;
+            if (tiles[peopleX][peopleY] != Tileset.WALL) {
+                tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
     }

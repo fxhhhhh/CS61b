@@ -64,12 +64,12 @@ public class Engine {
         int stop = 0;
         boolean flagNew = false;
         TETile[][] finalWorldFrame = null;
-        if (input.charAt(0) == 'N') {
+        if (input.charAt(0) == 'n') {
             flagNew = true;
         }
         if (flagNew) {
             for (int i = 0; i < input.length(); i++) {
-                if (input.charAt(i) == 'S') {
+                if (input.charAt(i) == 's') {
                     stop = i;
                 }
             }
@@ -141,7 +141,7 @@ public class Engine {
         move(tiles, movement, seed);
 
 
-        addGrass(tiles);
+//        addGrass(tiles);
 //        ter.renderFrame(tiles);
 //            createWindows(tiles);
 //            double mouseX = StdDraw.mouseX();
@@ -151,6 +151,10 @@ public class Engine {
 //                StdDraw.pause(500);
 //            }
 //        }
+        if(tiles==null){
+            System.out.println(1234);
+        }
+        System.out.println(tiles.toString());
         return tiles;
     }
 

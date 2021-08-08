@@ -3,7 +3,9 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import edu.princeton.cs.introcs.StdDraw;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -66,47 +68,94 @@ public class Engine {
     }
 
     public TETile[][] createWorld(String seed) {
-        RANDOM = new Random(seed.hashCode());
-        ter.initialize(WIDTH, HEIGHT);
-        ArrayList<Room> rooms = new ArrayList<>();
-        TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                tiles[x][y] = Tileset.NOTHING;
-            }
-        }
-        int mainRoomX = WIDTH / 2;
-        int mainRoomY = HEIGHT / 2;
-        Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
-        tiles[mainRoomX+1][mainRoomY+1]=Tileset.AVATAR;
-        int roomCount = RANDOM.nextInt(30);
-        while (roomCount < 25) {
-            roomCount = RANDOM.nextInt(30);
-        }
-        System.out.println("roomCount" + roomCount);
-        for (int i = 0; i < roomCount; i++) {
-            int roomSize = RANDOM.nextInt(7);
-            if (roomSize < 3) {
-                roomSize = RANDOM.nextInt(7);
-            }
-            System.out.println("roomSize" + roomSize);
-            int a = RANDOM.nextInt(WIDTH);
-            int b = RANDOM.nextInt(HEIGHT);
-            System.out.println(a + "," + b);
-            if (isInScope(a, b)) {
-                Room temp = new Room(tiles, a, b, roomSize);
-                if (roomSize != 0) {
-                    addRoad(tiles, temp, mainRoom);
-                    rooms.add(temp);
+        while (true) {
+            RANDOM = new Random(seed.hashCode());
+            ter.initialize(WIDTH, HEIGHT + 2);
+            ArrayList<Room> rooms = new ArrayList();
+            TETile[][] tiles = new TETile[WIDTH][HEIGHT];
+            for (int x = 0; x < WIDTH; x += 1) {
+                for (int y = 0; y < HEIGHT; y += 1) {
+                    tiles[x][y] = Tileset.NOTHING;
                 }
             }
+            int mainRoomX = WIDTH / 2;
+            int mainRoomY = HEIGHT / 2;
+            Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
+
+            tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
+
+            int roomCount = RANDOM.nextInt(30);
+            while (roomCount < 25) {
+                roomCount = RANDOM.nextInt(30);
+            }
+            System.out.println("roomCount" + roomCount);
+            for (int i = 0; i < roomCount; i++) {
+                int roomSize = RANDOM.nextInt(7);
+                if (roomSize < 3) {
+                    roomSize = RANDOM.nextInt(7);
+                }
+                System.out.println("roomSize" + roomSize);
+                int a = RANDOM.nextInt(WIDTH);
+                int b = RANDOM.nextInt(HEIGHT);
+                System.out.println(a + "," + b);
+                if (isInScope(a, b)) {
+                    Room temp = new Room(tiles, a, b, roomSize);
+                    if (roomSize != 0) {
+                        addRoad(tiles, temp, mainRoom);
+                        rooms.add(temp);
+                    }
+                }
+            }
+            addWalls(tiles);
+//            mainRoom.changeElement(tiles, Tileset.FLOWER);
+            addGrass(tiles);
+            ter.renderFrame(tiles);
+            createWindows(tiles);
+            double mouseX=StdDraw.mouseX();
+            double mouseY=StdDraw.mouseY();
+            StdDraw.clear(Color.BLACK);
+            while (StdDraw.mouseX()==mouseX&&StdDraw.mouseY()==mouseY){
+                StdDraw.pause(500);
+            }
         }
-        addWalls(tiles);
-        mainRoom.changeElement(tiles, Tileset.FLOWER);
-        addGrass(tiles);
-        ter.renderFrame(tiles);
-        return tiles;
     }
+
+    private void createWindows(TETile[][] tiles) {
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + 2);
+        Font fontSmall = new Font("Monaco", Font.BOLD, 20);
+        StdDraw.setFont(fontSmall);
+        StdDraw.line(0, HEIGHT, WIDTH, HEIGHT);
+        StdDraw.textLeft(0, HEIGHT + 1, "X:" + StdDraw.mouseX());
+        StdDraw.textLeft(10, HEIGHT + 1, "Y:" + StdDraw.mouseY());
+        StdDraw.textLeft(20, HEIGHT + 1, "This is :" + getObject(tiles,(int)StdDraw.mouseX(),(int)StdDraw.mouseY()));
+        StdDraw.textLeft(WIDTH - 10, HEIGHT + 1, "@Nintendo");
+        StdDraw.show();
+    }
+
+
+    public String getObject(TETile[][] tiles,int x,int y){
+        TETile tileObject = tiles[x][y];
+        if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0) {
+            return "something weird";
+        }
+        if (Tileset.FLOWER.equals(tileObject)) {
+            return "flower";
+        } else if (Tileset.WALL.equals(tileObject)) {
+            return "wall";
+        } else if (Tileset.SAND.equals(tileObject)) {
+            return "sand";
+        } else if (Tileset.GRASS.equals(tileObject)) {
+            return "grass";
+        } else if (Tileset.FLOOR.equals(tileObject)) {
+            return "floor";
+        }
+        return "something weird";
+    }
+
+
 
     public void addWalls(TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {

@@ -137,12 +137,12 @@ public class Engine {
     }
 
     public void move(TETile[][] tiles, String movement) {
-        boolean exist
+        boolean existQFlag=false;
         for(int i =0;i<movement.length();i++){
             if(movement.charAt(i)!=':'){
                 walk(tiles,movement.charAt(i));
             }else {
-
+                existQFlag
             }
         }
 

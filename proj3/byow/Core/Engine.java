@@ -17,13 +17,14 @@ public class Engine {
     public static final int HEIGHT = 30;
     public static int SEED;
     public static Random RANDOM = new Random(SEED);
-    public HashMap<String, TETile[][]> existWorld = new HashMap<>();
+    public HashMap<String, String> existWorld = new HashMap<>();
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+
     }
 
     /**
@@ -56,18 +57,28 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
         String seed = null;
-        seed = input.substring(1, input.length() - 1);
+        int stop = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == 'S') {
+                stop = i;
+                System.out.println(stop);
+            }
+        }
+        seed = input.substring(1, stop);
+        String movement = input.substring(stop + 1, input.length());
         TETile[][] finalWorldFrame = null;
         if (existWorld.containsKey(seed)) {
-            return existWorld.get(seed);
+            existWorld.put(seed, existWorld.get(seed) + movement);
+            finalWorldFrame = createWorld(seed, movement + existWorld.get(seed));
         } else {
-            finalWorldFrame = createWorld(seed);
-            existWorld.put(seed, finalWorldFrame);
-            return finalWorldFrame;
+            existWorld.put(seed, movement);
+            finalWorldFrame = createWorld(seed, movement);
         }
+        return finalWorldFrame;
     }
 
-    public TETile[][] createWorld(String seed) {
+
+    public TETile[][] createWorld(String seed, String movement) {
         while (true) {
             RANDOM = new Random(seed.hashCode());
             ter.initialize(WIDTH, HEIGHT + 2);
@@ -81,13 +92,12 @@ public class Engine {
             int mainRoomX = WIDTH / 2;
             int mainRoomY = HEIGHT / 2;
             Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
-
             tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
-
             int roomCount = RANDOM.nextInt(30);
             while (roomCount < 25) {
                 roomCount = RANDOM.nextInt(30);
             }
+
             System.out.println("roomCount" + roomCount);
             for (int i = 0; i < roomCount; i++) {
                 int roomSize = RANDOM.nextInt(7);
@@ -98,6 +108,7 @@ public class Engine {
                 int a = RANDOM.nextInt(WIDTH);
                 int b = RANDOM.nextInt(HEIGHT);
                 System.out.println(a + "," + b);
+
                 if (isInScope(a, b)) {
                     Room temp = new Room(tiles, a, b, roomSize);
                     if (roomSize != 0) {
@@ -108,14 +119,43 @@ public class Engine {
             }
             addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
+
+            move(tiles,movement);
+
+
+
             addGrass(tiles);
             ter.renderFrame(tiles);
             createWindows(tiles);
-            double mouseX=StdDraw.mouseX();
-            double mouseY=StdDraw.mouseY();
+            double mouseX = StdDraw.mouseX();
+            double mouseY = StdDraw.mouseY();
             StdDraw.clear(Color.BLACK);
-            while (StdDraw.mouseX()==mouseX&&StdDraw.mouseY()==mouseY){
+            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
                 StdDraw.pause(500);
+            }
+        }
+    }
+
+    public void move(TETile[][] tiles, String movement) {
+        boolean exist
+        for(int i =0;i<movement.length();i++){
+            if(movement.charAt(i)!=':'){
+                walk(tiles,movement.charAt(i));
+            }else {
+
+            }
+        }
+
+    }
+    public void walk(TETile[][] tiles,Character a){
+        int peopleX=0;
+        int peopleY=0;
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                if(tiles[x][y] == Tileset.AVATAR){
+                    peopleX=x;
+                    peopleY=y;
+                }
             }
         }
     }
@@ -130,31 +170,31 @@ public class Engine {
         StdDraw.line(0, HEIGHT, WIDTH, HEIGHT);
         StdDraw.textLeft(0, HEIGHT + 1, "X:" + StdDraw.mouseX());
         StdDraw.textLeft(10, HEIGHT + 1, "Y:" + StdDraw.mouseY());
-        StdDraw.textLeft(20, HEIGHT + 1, "This is :" + getObject(tiles,(int)StdDraw.mouseX(),(int)StdDraw.mouseY()));
+        StdDraw.textLeft(20, HEIGHT + 1, "This is :" + getObject(tiles, (int) StdDraw.mouseX(), (int) StdDraw.mouseY()));
         StdDraw.textLeft(WIDTH - 10, HEIGHT + 1, "@Nintendo");
         StdDraw.show();
     }
 
 
-    public String getObject(TETile[][] tiles,int x,int y){
-        TETile tileObject = tiles[x][y];
+    public String getObject(TETile[][] tiles, int x, int y) {
         if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0) {
             return "something weird";
+        } else {
+            TETile tileObject = tiles[x][y];
+            if (Tileset.FLOWER.equals(tileObject)) {
+                return "flower";
+            } else if (Tileset.WALL.equals(tileObject)) {
+                return "wall";
+            } else if (Tileset.SAND.equals(tileObject)) {
+                return "sand";
+            } else if (Tileset.GRASS.equals(tileObject)) {
+                return "grass";
+            } else if (Tileset.FLOOR.equals(tileObject)) {
+                return "floor";
+            }
+            return "something weird";
         }
-        if (Tileset.FLOWER.equals(tileObject)) {
-            return "flower";
-        } else if (Tileset.WALL.equals(tileObject)) {
-            return "wall";
-        } else if (Tileset.SAND.equals(tileObject)) {
-            return "sand";
-        } else if (Tileset.GRASS.equals(tileObject)) {
-            return "grass";
-        } else if (Tileset.FLOOR.equals(tileObject)) {
-            return "floor";
-        }
-        return "something weird";
     }
-
 
 
     public void addWalls(TETile[][] tiles) {
@@ -202,23 +242,23 @@ public class Engine {
         if (Math.min(a.x, main.x) == a.x) {
             if (Math.min(a.y, main.y) == a.y) {
                 for (int x = a.x + a.size; x < main.x + RANDOM.nextInt(2); x += 1) {
-                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.SAND) {
+                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.FLOOR) {
                         tiles[x][a.y] = Tileset.SAND;
                     }
                 }
                 for (int y = a.y; y < main.y; y += 1) {
-                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.SAND) {
+                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.FLOOR) {
                         tiles[main.x][y] = Tileset.SAND;
                     }
                 }
             } else {
                 for (int x = a.x + a.size; x < main.x; x += 1) {
-                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.SAND) {
+                    if (isInScope(x, a.y) && tiles[x][a.y] != Tileset.FLOOR) {
                         tiles[x][a.y] = Tileset.SAND;
                     }
                 }
                 for (int y = a.y; y > main.y; y -= 1) {
-                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.SAND) {
+                    if (isInScope(main.x, y) && tiles[main.x][y] != Tileset.FLOOR) {
                         tiles[main.x][y] = Tileset.SAND;
                     }
                 }
@@ -226,23 +266,23 @@ public class Engine {
         } else {
             if (Math.min(a.y, main.y) == a.y) {
                 for (int x = main.x + main.size; x < a.x; x += 1) {
-                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.SAND) {
+                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.FLOOR) {
                         tiles[x][main.y] = Tileset.SAND;
                     }
                 }
                 for (int y = main.y; y > a.y + a.size - 1; y -= 1) {
-                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.SAND) {
+                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.FLOOR) {
                         tiles[a.x][y] = Tileset.SAND;
                     }
                 }
             } else {
                 for (int x = main.x + main.size; x < a.x; x += 1) {
-                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.SAND) {
+                    if (isInScope(x, main.y) && tiles[x][main.y] != Tileset.FLOOR) {
                         tiles[x][main.y] = Tileset.SAND;
                     }
                 }
                 for (int y = main.y; y < a.y; y += 1) {
-                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.SAND) {
+                    if (isInScope(a.x, y) && tiles[a.x][y] != Tileset.FLOOR) {
                         tiles[a.x][y] = Tileset.SAND;
                     }
                 }

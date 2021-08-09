@@ -122,16 +122,14 @@ public class Engine {
                 int roomSize = RandomUtils.uniform(RANDOM, 3, 7);
 
 
-                int a = RANDOM.nextInt(WIDTH);
-                int b = RANDOM.nextInt(HEIGHT);
+                int a = RandomUtils.uniform(RANDOM, 1, WIDTH);
+                int b = RandomUtils.uniform(RANDOM, 1, HEIGHT);
 
 
-                if (isInScope(a, b)) {
-                    Room temp = new Room(tiles, a, b, roomSize);
-                    if (roomSize != 0) {
-                        addRoad(tiles, temp, mainRoom);
-                        rooms.add(temp);
-                    }
+                Room temp = new Room(tiles, a, b, roomSize);
+                if (roomSize != 0) {
+                    addRoad(tiles, temp, mainRoom);
+                    rooms.add(temp);
                 }
             }
             addWalls(tiles);

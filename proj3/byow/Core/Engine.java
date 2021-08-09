@@ -114,16 +114,13 @@ public class Engine {
             Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
             int count = 0;
 
-            int roomCount = RANDOM.nextInt(30);
-            while (roomCount < 25) {
-                roomCount = RANDOM.nextInt(30);
-            }
+            // always have 25-30 rooms
+            int roomCount = RandomUtils.uniform(RANDOM, 25, 30);
 
             for (int i = 0; i < roomCount; i++) {
-                int roomSize = RANDOM.nextInt(7);
-                if (roomSize < 3) {
-                    roomSize = RANDOM.nextInt(7);
-                }
+                // size is always 3-7
+                int roomSize = RandomUtils.uniform(RANDOM, 3, 7);
+
 
                 int a = RANDOM.nextInt(WIDTH);
                 int b = RANDOM.nextInt(HEIGHT);

@@ -26,13 +26,97 @@ public class Engine {
     public HashMap<String, String> existWorld = new HashMap<>();
 
 
+
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        String usrInput = new String();
+        String seed = "121313";
+        char key;
+        normalStartGame(WIDTH, HEIGHT, Long.parseLong(seed));
+        int count = 0;
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                count += 1;
+                key = StdDraw.nextKeyTyped();
+                System.out.println(key);
+                String input;
+                if (key == 'n') {
+                    input = "n" + seed + "s";
+                    interactWithInputString(input);
+                }
+                if (key == 'l') {
+                    input = "l";
+                    interactWithInputString(input);
+                }
+                if (key == 'q') {
+                    System.exit(0);
+                }
+                if (key == 'c') {
+                    if (count % 2 == 0) {
+                        normalStartGame(WIDTH, HEIGHT, Long.parseLong(seed));
+                    } else {
+                        chineseStartGame(WIDTH, HEIGHT, Long.parseLong(seed));
+                    }
+                }
+            }
+        }
+    }
 
+    public void normalStartGame(int width, int height, long seed) {
+        StdDraw.setCanvasSize(16 * width, 16 * height);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, width);
+        StdDraw.setYscale(0, height);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.enableDoubleBuffering();
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.WHITE);
+        Font fontBig = new Font("Monaco", Font.BOLD, 40);
+        StdDraw.setFont(fontBig);
+        StdDraw.text(WIDTH / 2, HEIGHT * 6 / 8, "Brogue");
+        Font fontMiddle = new Font("Monaco", Font.PLAIN, 20);
+        StdDraw.setFont(fontMiddle);
+        StdDraw.text(WIDTH / 2, HEIGHT * 8 / 16, "NEW WORLD(N)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 7 / 16, "LOAD WORLD(L)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 6 / 16, "CHANGE LANGUAGE(C)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 5 / 16, "QUIT(Q)");
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + 2);
+        Font fontSmall = new Font("Monaco", Font.BOLD, 20);
+        StdDraw.setFont(fontSmall);
+        StdDraw.textLeft(WIDTH - 10, HEIGHT + 1, "@Nintendo");
+        StdDraw.show();
+    }
 
+    public void chineseStartGame(int width, int height, long seed) {
+        StdDraw.setCanvasSize(16 * width, 16 * height);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, width);
+        StdDraw.setYscale(0, height);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.enableDoubleBuffering();
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.WHITE);
+        Font fontBig = new Font("Monaco", Font.BOLD, 40);
+        StdDraw.setFont(fontBig);
+        StdDraw.text(WIDTH / 2, HEIGHT * 6 / 8, "Brogue");
+        Font fontMiddle = new Font("Monaco", Font.PLAIN, 20);
+        StdDraw.setFont(fontMiddle);
+        StdDraw.text(WIDTH / 2, HEIGHT * 8 / 16, "新建游戏(N)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 7 / 16, "下载存档(L)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 6 / 16, "改变语言(C)");
+        StdDraw.text(WIDTH / 2, HEIGHT * 5 / 16, "退出(Q)");
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + 2);
+        Font fontSmall = new Font("Monaco", Font.BOLD, 20);
+        StdDraw.setFont(fontSmall);
+        StdDraw.textLeft(WIDTH - 10, HEIGHT + 1, "@Nintendo");
+        StdDraw.show();
     }
 
     /**
@@ -126,17 +210,33 @@ public class Engine {
         int mainRoomY = HEIGHT / 2;
 
         ter.initialize(WIDTH, HEIGHT + 2);
-        TETile[][] tiles = generateRoom(seed, movement, mainRoomX, mainRoomY);
+
 //        ter.renderFrame(tiles);
         while (true) {
+            boolean moveFlag = false;
+            TETile[][] tiles = generateRoom(seed, movement, mainRoomX, mainRoomY);
             double mouseX = StdDraw.mouseX();
             double mouseY = StdDraw.mouseY();
             ter.renderFrame(tiles);
             createWindows(tiles);
-//            StdDraw.clear(Color.BLACK);
-            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
-                StdDraw.pause(50);
+            while (true) {
+                if (StdDraw.hasNextKeyTyped()) {
+                    Character key = StdDraw.nextKeyTyped();
+                    movement += key;
+                    moveFlag = true;
+                    break;
+                }
+                if (StdDraw.mouseX() != mouseX || StdDraw.mouseY() != mouseY) {
+                    break;
+                }
             }
+//            StdDraw.clear(Color.BLACK);
+//            while (!moveFlag || StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
+//                StdDraw.pause(10);
+//                System.out.println("still in the loop ");
+//            }
+
+
         }
     }
 
@@ -185,15 +285,20 @@ public class Engine {
         boolean existQFlag = false;
         String temp = "";
         for (int i = 0; i < movement.length(); i++) {
-            if (movement.charAt(i) != ':') {
+            System.out.println(movement);
+            if (movement.charAt(i) != 'q' && movement.charAt(i) != 'Q') {
                 temp += movement.charAt(i);
                 walk(tiles, movement.charAt(i));
             } else {
-                existQFlag = true;
-                break;
+                System.out.println(movement.charAt(i));
+                System.out.println(movement.charAt(i - 1));
+                if (movement.charAt(i - 1) == ':') {
+                    existQFlag = true;
+                    break;
+                }
             }
         }
-        ;
+
         if (existQFlag) {
             File file = new File("saving.txt");
             try {
@@ -201,6 +306,7 @@ public class Engine {
                 output.write(seed + "\n");
                 output.write(temp);
                 output.close();
+                System.exit(0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -217,14 +323,12 @@ public class Engine {
                 if (tiles[x][y] == Tileset.AVATAR) {
                     peopleX = x;
                     peopleY = y;
-                    System.out.println(peopleX);
-                    System.out.println(peopleY);
                     break;
                 }
             }
         }
 
-        if (a == 'd') {
+        if (a == 'd' || a == 'D') {
             tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleX += 1;
             System.out.println(123);
@@ -236,7 +340,7 @@ public class Engine {
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 'w') {
+        if (a == 'w' || a == 'W') {
             tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleY += 1;
 
@@ -247,7 +351,7 @@ public class Engine {
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 's') {
+        if (a == 's' || a == 'S') {
             tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleY -= 1;
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
@@ -257,7 +361,7 @@ public class Engine {
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
         }
-        if (a == 'a') {
+        if (a == 'a' || a == 'A') {
             tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleX -= 1;
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
@@ -266,6 +370,9 @@ public class Engine {
                 peopleX += 1;
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             }
+        }
+        if (a == 'b' || a == 'B') {
+            interactWithKeyboard();
         }
     }
 
@@ -281,6 +388,7 @@ public class Engine {
         StdDraw.textLeft(10, HEIGHT + 1, "Y:" + StdDraw.mouseY());
         StdDraw.textLeft(20, HEIGHT + 1, "This is :" + getObject(tiles, (int) StdDraw.mouseX(), (int) StdDraw.mouseY()));
         StdDraw.textLeft(WIDTH - 10, HEIGHT + 1, "@Nintendo");
+
         StdDraw.show();
     }
 

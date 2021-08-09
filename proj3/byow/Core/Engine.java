@@ -28,6 +28,8 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        
+
 
     }
 
@@ -87,7 +89,7 @@ public class Engine {
                 String addedMove;
                 seed = r.readLine();
                 addedMove = r.readLine();
-                finalWorldFrame = createWorld(seed,  addedMove+movement);
+                finalWorldFrame = createWorld(seed, addedMove + movement);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -97,60 +99,65 @@ public class Engine {
 
 
     public TETile[][] createWorld(String seed, String movement) {
-//        while (true) {
-        RANDOM = new Random(seed.hashCode());
-//        ter.initialize(WIDTH, HEIGHT + 2);
-        ArrayList<Room> rooms = new ArrayList();
+
+        // set up main room, 4x4
+        int mainRoomX = WIDTH / 2;
+        int mainRoomY = HEIGHT / 2;
+
+        ter.initialize(WIDTH, HEIGHT + 2);
+        TETile[][] tiles = generateRoom(seed, movement, mainRoomX, mainRoomY);
+//        ter.renderFrame(tiles);
+        while (true) {
+            double mouseX = StdDraw.mouseX();
+            double mouseY = StdDraw.mouseY();
+            ter.renderFrame(tiles);
+            createWindows(tiles);
+//            StdDraw.clear(Color.BLACK);
+            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
+                StdDraw.pause(50);
+            }
+        }
+    }
+
+    private TETile[][] generateRoom(String seed, String movement, int mainRoomX, int mainRoomY) {
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
+        RANDOM = new Random(seed.hashCode());
+        ArrayList<Room> rooms = new ArrayList();
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 tiles[x][y] = Tileset.NOTHING;
             }
         }
-        int mainRoomX = WIDTH / 2;
-        int mainRoomY = HEIGHT / 2;
         Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
-        tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
-        int roomCount = RANDOM.nextInt(30);
-        while (roomCount < 25) {
-            roomCount = RANDOM.nextInt(30);
-        }
+
+
+        // always have 25-30 rooms
+        int roomCount = RandomUtils.uniform(RANDOM, 25, 30);
 
         for (int i = 0; i < roomCount; i++) {
-            int roomSize = RANDOM.nextInt(7);
-            if (roomSize < 3) {
-                roomSize = RANDOM.nextInt(7);
-            }
-
-            int a = RANDOM.nextInt(WIDTH);
-            int b = RANDOM.nextInt(HEIGHT);
+            // size is always 3-7
+            int roomSize = RandomUtils.uniform(RANDOM, 3, 7);
 
 
-            if (isInScope(a, b)) {
-                Room temp = new Room(tiles, a, b, roomSize);
-                if (roomSize != 0) {
-                    addRoad(tiles, temp, mainRoom);
-                    rooms.add(temp);
-                }
+            int a = RandomUtils.uniform(RANDOM, 1, WIDTH);
+            int b = RandomUtils.uniform(RANDOM, 1, HEIGHT);
+
+
+            Room temp = new Room(tiles, a, b, roomSize);
+            if (roomSize != 0) { // why roomsize could be zero?
+                addRoad(tiles, temp, mainRoom);
+                rooms.add(temp);
             }
         }
         addWalls(tiles);
 //            mainRoom.changeElement(tiles, Tileset.FLOWER);
 
-        move(tiles, movement, seed);
+            tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
+            move(tiles, movement, seed);
 
 
-//        addGrass(tiles);
-//        ter.renderFrame(tiles);
-//            createWindows(tiles);
-//            double mouseX = StdDraw.mouseX();
-//            double mouseY = StdDraw.mouseY();
-//            StdDraw.clear(Color.BLACK);
-//            while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
-//                StdDraw.pause(500);
-//            }
-//        }
 
+        addGrass(tiles);
         return tiles;
     }
 
@@ -166,10 +173,9 @@ public class Engine {
                 break;
             }
         }
+        ;
         if (existQFlag) {
             File file = new File("saving.txt");
-
-            System.out.println(111);
             try {
                 BufferedWriter output = new BufferedWriter(new FileWriter(file));
                 output.write(seed + "\n");
@@ -178,15 +184,6 @@ public class Engine {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                BufferedWriter output = new BufferedWriter(new FileWriter(file));
-                output.write(seed + "\n");
-                output.write(temp);
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
 
         }
 
@@ -200,14 +197,19 @@ public class Engine {
                 if (tiles[x][y] == Tileset.AVATAR) {
                     peopleX = x;
                     peopleY = y;
+                    System.out.println(peopleX);
+                    System.out.println(peopleY);
+                    break;
                 }
             }
         }
 
         if (a == 'd') {
-            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleX += 1;
+            System.out.println(123);
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
+                System.out.println(123);
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
             } else {
                 peopleX -= 1;
@@ -215,7 +217,7 @@ public class Engine {
             }
         }
         if (a == 'w') {
-            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleY += 1;
 
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
@@ -226,7 +228,7 @@ public class Engine {
             }
         }
         if (a == 's') {
-            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleY -= 1;
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
@@ -236,7 +238,7 @@ public class Engine {
             }
         }
         if (a == 'a') {
-            tiles[peopleX][peopleY] = Tileset.FLOOR;
+            tiles[peopleX][peopleY] = Tileset.FLOWER;
             peopleX -= 1;
             if (isInScope(peopleX, peopleY) && tiles[peopleX][peopleY] != Tileset.WALL) {
                 tiles[peopleX][peopleY] = Tileset.AVATAR;
@@ -284,6 +286,7 @@ public class Engine {
     }
 
 
+    // add walls around rooms
     public void addWalls(TETile[][] tiles) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -395,7 +398,7 @@ public class Engine {
             size = c;
             for (int i = 0; i < size; i += 1) {
                 for (int j = 0; j < size; j += 1) {
-                    if (a + i < WIDTH && b + j < HEIGHT && b + j > 0 && a + i > 0) {
+                    if (isInScope(a+i, b+j)) {
                         tiles[i + a][j + b] = Tileset.FLOOR;
                     }
                 }

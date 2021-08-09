@@ -101,56 +101,61 @@ public class Engine {
         int mainRoomX = WIDTH / 2;
         int mainRoomY = HEIGHT / 2;
 
+        ter.initialize(WIDTH, HEIGHT + 2);
+        TETile[][] tiles = generateRoom(seed, movement, mainRoomX, mainRoomY);
+//        ter.renderFrame(tiles);
         while (true) {
-            TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-            RANDOM = new Random(seed.hashCode());
-            ter.initialize(WIDTH, HEIGHT + 2);
-            ArrayList<Room> rooms = new ArrayList();
-            for (int x = 0; x < WIDTH; x += 1) {
-                for (int y = 0; y < HEIGHT; y += 1) {
-                    tiles[x][y] = Tileset.NOTHING;
-                }
-            }
-            Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
-            int count = 0;
-
-            // always have 25-30 rooms
-            int roomCount = RandomUtils.uniform(RANDOM, 25, 30);
-
-            for (int i = 0; i < roomCount; i++) {
-                // size is always 3-7
-                int roomSize = RandomUtils.uniform(RANDOM, 3, 7);
-
-
-                int a = RandomUtils.uniform(RANDOM, 1, WIDTH);
-                int b = RandomUtils.uniform(RANDOM, 1, HEIGHT);
-
-
-                Room temp = new Room(tiles, a, b, roomSize);
-                if (roomSize != 0) {
-                    addRoad(tiles, temp, mainRoom);
-                    rooms.add(temp);
-                }
-            }
-            addWalls(tiles);
-//            mainRoom.changeElement(tiles, Tileset.FLOWER);
-            if (count == 0) {
-                tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
-                move(tiles, movement, seed);
-            }
-
-            count += 1;
-            addGrass(tiles);
-            ter.renderFrame(tiles);
-            createWindows(tiles);
             double mouseX = StdDraw.mouseX();
             double mouseY = StdDraw.mouseY();
-            StdDraw.clear(Color.BLACK);
+            ter.renderFrame(tiles);
+            createWindows(tiles);
+//            StdDraw.clear(Color.BLACK);
             while (StdDraw.mouseX() == mouseX && StdDraw.mouseY() == mouseY) {
-                StdDraw.pause(500);
+                StdDraw.pause(50);
             }
-
         }
+    }
+
+    private TETile[][] generateRoom(String seed, String movement, int mainRoomX, int mainRoomY) {
+        TETile[][] tiles = new TETile[WIDTH][HEIGHT];
+        RANDOM = new Random(seed.hashCode());
+        ArrayList<Room> rooms = new ArrayList();
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
+            }
+        }
+        Room mainRoom = new Room(tiles, mainRoomX, mainRoomY, 4);
+        int count = 0;
+
+        // always have 25-30 rooms
+        int roomCount = RandomUtils.uniform(RANDOM, 25, 30);
+
+        for (int i = 0; i < roomCount; i++) {
+            // size is always 3-7
+            int roomSize = RandomUtils.uniform(RANDOM, 3, 7);
+
+
+            int a = RandomUtils.uniform(RANDOM, 1, WIDTH);
+            int b = RandomUtils.uniform(RANDOM, 1, HEIGHT);
+
+
+            Room temp = new Room(tiles, a, b, roomSize);
+            if (roomSize != 0) { // why roomsize could be zero?
+                addRoad(tiles, temp, mainRoom);
+                rooms.add(temp);
+            }
+        }
+        addWalls(tiles);
+//            mainRoom.changeElement(tiles, Tileset.FLOWER);
+        if (count == 0) {
+            tiles[mainRoomX][mainRoomY] = Tileset.AVATAR;
+            move(tiles, movement, seed);
+        }
+
+        count += 1;
+        addGrass(tiles);
+        return tiles;
     }
 
     public void move(TETile[][] tiles, String movement, String seed) {

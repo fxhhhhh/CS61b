@@ -398,7 +398,7 @@ public class Engine {
             size = c;
             for (int i = 0; i < size; i += 1) {
                 for (int j = 0; j < size; j += 1) {
-                    if (a + i < WIDTH && b + j < HEIGHT && b + j > 0 && a + i > 0) {
+                    if (isInScope(a+i, b+j)) {
                         tiles[i + a][j + b] = Tileset.FLOOR;
                     }
                 }
